@@ -1,0 +1,100 @@
+.main-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hexagon-background-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Not setting height to 100% ensures it doesn't extend past content */
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Stop at the hexagon-end-marker */
+  height: calc(100% - 1px);
+}
+
+.hexagon-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.hexagon-end-marker {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  margin-bottom: 0;
+  visibility: hidden;
+}
+
+.hexagon-row {
+  display: inline-flex;
+  margin-top: -32px;
+  margin-left: -50px;
+}
+
+.hexagon-row:nth-child(even) {
+  margin-left: 1px;
+}
+
+.hexagon {
+  position: relative;
+  width: 100px;
+  height: 110px;
+  background-color: rgba(255, 255, 255, 0);
+  margin: 2px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  transition: 0.5s;
+  opacity: 0.4;
+}
+
+.hexagon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  pointer-events: none;
+  background-color: rgba(255,255,255,0);
+  z-index: 1;
+}
+
+.hexagon:hover {
+  background-color: rgba(59, 130, 246, 0.0);
+  transition: 0s;
+  opacity: 0.8;
+}
+
+.cursor-effect {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(29, 78, 216, 0.2) 50%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(30px);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
