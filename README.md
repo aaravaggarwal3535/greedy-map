@@ -21,7 +21,6 @@ Greedy-map helps developers and tech enthusiasts understand the technology stack
 
 - **Core:**
   - React 18
-  - TypeScript 5
   - Vite
   - Tailwind CSS
   - Redux Toolkit
