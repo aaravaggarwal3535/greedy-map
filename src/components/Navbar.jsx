@@ -34,7 +34,9 @@ export const Navbar = () => {
     { path: "/platforms", label: "Platforms" },
     { path: "/learning", label: "Learning" },
     { path: "/roadmap", label: "Roadmap" },
-    { path: "/community", label: "Community" }
+    { path: "/community", label: "Community" },
+    { path: "/projects", label: "Projects" },
+    { path: "/contributor", label: "Contributor" }
   ];
 
   // Simplified mobile menu animation variants

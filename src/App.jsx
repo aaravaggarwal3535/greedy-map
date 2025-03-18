@@ -12,6 +12,8 @@ import Learning from "./pages/Learning"
 import Signin from "./pages/signin"
 import Signup from "./pages/signup"
 import Roadmap from "./pages/Roadmap";
+import Projects from "./pages/Projects";
+import Contributor from "./pages/Contributor";
 import TechStackDetail from "./pages/TechStackDetail";
 import { ReactFlowProvider } from "@xyflow/react";
 import '@xyflow/react/dist/style.css';
@@ -34,6 +36,8 @@ const App = () => (
             <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/contributor" element={<Contributor />} />
             <Route path="/techstack/:platformId" element={<TechStackDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
