@@ -10,213 +10,6 @@ import { FaXTwitter } from "react-icons/fa6";
 import { Instagram } from "lucide-react";
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
-// Mock data for contributors - enhanced with platform contributions
-const mockContributors = [
-  {
-    id: 1,
-    name: 'Sarah Johnson',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-    role: 'Frontend Developer',
-    contributions: 127,
-    bio: 'Passionate about React and modern web development. Building accessible and beautiful interfaces.',
-    skills: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-    github: 'https://github.com/sarahjohnson',
-    linkedin: 'https://linkedin.com/in/sarahjohnson',
-    twitter: 'https://twitter.com/sarahjohnson',
-    website: 'https://sarahjohnson.dev',
-    platformContributions: [
-      { 
-        platformId: 'netflix', 
-        platformName: 'Netflix', 
-        techUpdated: ['React', 'Next.js', 'Redux'],
-        description: 'Updated frontend tech stack to include modern React patterns and performance optimization techniques.'
-      },
-      { 
-        platformId: 'spotify', 
-        platformName: 'Spotify', 
-        techUpdated: ['React', 'Styled Components'],
-        description: 'Added information about Spotify\'s design system and component library.'
-      }
-    ]
-  },
-  {
-    id: 2,
-    name: 'Alex Chen',
-    avatar: 'https://i.pravatar.cc/150?img=11',
-    role: 'Full Stack Developer',
-    contributions: 95,
-    bio: 'Building scalable web applications with modern technologies. Open source enthusiast.',
-    skills: ['JavaScript', 'Node.js', 'MongoDB', 'Docker'],
-    github: 'https://github.com/alexchen',
-    linkedin: 'https://linkedin.com/in/alexchen',
-    platformContributions: [
-      { 
-        platformId: 'airbnb', 
-        platformName: 'Airbnb', 
-        techUpdated: ['Node.js', 'GraphQL', 'React'],
-        description: 'Updated backend architecture details and API design patterns used by Airbnb.'
-      },
-      { 
-        platformId: 'slack', 
-        platformName: 'Slack', 
-        techUpdated: ['Electron', 'Redux', 'WebSockets'],
-        description: 'Added detailed information about how Slack uses WebSockets and Electron for real-time communication.'
-      }
-    ]
-  },
-  {
-    id: 3,
-    name: 'Maya Patel',
-    avatar: 'https://i.pravatar.cc/150?img=5',
-    role: 'UI/UX Designer',
-    contributions: 78,
-    bio: 'Creating intuitive and delightful user experiences. Design systems expert.',
-    skills: ['Figma', 'UI Design', 'Design Systems', 'User Research'],
-    github: 'https://github.com/mayapatel',
-    website: 'https://mayapatels.design',
-    platformContributions: [
-      { 
-        platformId: 'ig', 
-        platformName: 'Instagram', 
-        techUpdated: ['Design System', 'React Native', 'UI Components'],
-        description: 'Updated information about Instagram\'s design system and accessibility features.'
-      }
-    ]
-  },
-  {
-    id: 4,
-    name: 'Carlos Rodriguez',
-    avatar: 'https://i.pravatar.cc/150?img=12',
-    role: 'Backend Engineer',
-    contributions: 142,
-    bio: 'Performance optimization specialist. Working on distributed systems and cloud architecture.',
-    skills: ['Python', 'Django', 'AWS', 'PostgreSQL', 'Redis'],
-    github: 'https://github.com/carlosr',
-    linkedin: 'https://linkedin.com/in/carlosrodriguez',
-    twitter: 'https://twitter.com/carlosr',
-    platformContributions: [
-      { 
-        platformId: 'twitter', 
-        platformName: 'Twitter', 
-        techUpdated: ['Scala', 'Redis', 'Kafka'],
-        description: 'Provided detailed insights on Twitter\'s real-time data processing capabilities.'
-      },
-      { 
-        platformId: 'uber', 
-        platformName: 'Uber', 
-        techUpdated: ['Go', 'Cassandra', 'Kafka'],
-        description: 'Updated information about Uber\'s microservices architecture and data processing pipeline.'
-      },
-      { 
-        platformId: 'airbnb', 
-        platformName: 'Airbnb', 
-        techUpdated: ['Python', 'Kubernetes', 'ML Infrastructure'],
-        description: 'Added details about Airbnb\'s machine learning infrastructure and data pipeline.'
-      }
-    ]
-  },
-  {
-    id: 5,
-    name: 'Aisha Williams',
-    avatar: 'https://i.pravatar.cc/150?img=9',
-    role: 'DevOps Engineer',
-    contributions: 83,
-    bio: 'Automating everything. CI/CD pipeline expert and infrastructure enthusiast.',
-    skills: ['Kubernetes', 'Terraform', 'GitHub Actions', 'AWS', 'Monitoring'],
-    github: 'https://github.com/aishawilliams',
-    linkedin: 'https://linkedin.com/in/aishawilliams',
-    platformContributions: [
-      { 
-        platformId: 'netflix', 
-        platformName: 'Netflix', 
-        techUpdated: ['AWS', 'Kubernetes', 'Spinnaker'],
-        description: 'Updated details about Netflix\'s cloud infrastructure and deployment practices.'
-      },
-      { 
-        platformId: 'spotify', 
-        platformName: 'Spotify', 
-        techUpdated: ['Kubernetes', 'GCP', 'CI/CD'],
-        description: 'Added information about Spotify\'s move to Google Cloud Platform and their Kubernetes setup.'
-      }
-    ]
-  },
-  {
-    id: 6,
-    name: 'Jamal Thompson',
-    avatar: 'https://i.pravatar.cc/150?img=13',
-    role: 'Mobile Developer',
-    contributions: 62,
-    bio: 'Building cross-platform mobile experiences. React Native specialist.',
-    skills: ['React Native', 'JavaScript', 'TypeScript', 'Redux', 'Mobile UX'],
-    github: 'https://github.com/jamalthompson',
-    website: 'https://jamalthompson.dev',
-    platformContributions: [
-      { 
-        platformId: 'ig', 
-        platformName: 'Instagram', 
-        techUpdated: ['React Native', 'Mobile Infrastructure', 'Redux'],
-        description: 'Updated information about Instagram\'s mobile architecture and performance optimizations.'
-      },
-      { 
-        platformId: 'uber', 
-        platformName: 'Uber', 
-        techUpdated: ['React Native', 'Mobile Maps', 'Native Modules'],
-        description: 'Added details about how Uber integrates maps and location services in their mobile apps.'
-      }
-    ]
-  },
-  {
-    id: 7,
-    name: 'Sophia Kim',
-    avatar: 'https://i.pravatar.cc/150?img=8',
-    role: 'Data Scientist',
-    contributions: 54,
-    bio: 'Turning data into actionable insights. ML model optimization and data visualization expert.',
-    skills: ['Python', 'TensorFlow', 'PyTorch', 'Data Analysis', 'Visualization'],
-    github: 'https://github.com/sophiakim',
-    linkedin: 'https://linkedin.com/in/sophiakim',
-    twitter: 'https://twitter.com/sophiakim',
-    platformContributions: [
-      { 
-        platformId: 'netflix', 
-        platformName: 'Netflix', 
-        techUpdated: ['PyTorch', 'Recommendation System', 'Data Processing'],
-        description: 'Updated information about Netflix\'s recommendation algorithms and ML infrastructure.'
-      },
-      { 
-        platformId: 'spotify', 
-        platformName: 'Spotify', 
-        techUpdated: ['ML Pipeline', 'Recommendation', 'Data Science'],
-        description: 'Added details about Spotify\'s recommendation engine and personalization features.'
-      }
-    ]
-  },
-  {
-    id: 8,
-    name: 'David Martinez',
-    avatar: 'https://i.pravatar.cc/150?img=17',
-    role: 'Technical Writer',
-    contributions: 43,
-    bio: 'Documenting complex technical concepts in accessible ways. API documentation specialist.',
-    skills: ['Technical Writing', 'Documentation', 'Markdown', 'API Reference'],
-    github: 'https://github.com/davidmartinez',
-    website: 'https://davidwrites.tech',
-    platformContributions: [
-      { 
-        platformId: 'stripe', 
-        platformName: 'Stripe', 
-        techUpdated: ['API Documentation', 'Developer Experience'],
-        description: 'Updated information about Stripe\'s API design and developer documentation approach.'
-      },
-      { 
-        platformId: 'slack', 
-        platformName: 'Slack', 
-        techUpdated: ['API Documentation', 'SDK'],
-        description: 'Added comprehensive details about Slack\'s API structure and documentation.'
-      }
-    ]
-  }
-];
 
 // Map of platform IDs to their icons for the modal
 const platformIcons = {
@@ -236,24 +29,29 @@ const Contributor = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedContributor, setSelectedContributor] = useState(null);
+  const [error, setError] = useState(null);
 
-  // Simulate fetching data from backend
+  // Fetch data from backend API
   useEffect(() => {
     const fetchContributors = async () => {
-      // Simulate API delay
       setIsLoading(true);
+      setError(null);
+      
       try {
-        // In a real app, you would fetch from an API
-        // const response = await fetch('/api/contributors');
-        // const data = await response.json();
+        const response = await fetch('http://localhost:3000/contributor');
         
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 800));
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
         
-        // Use mock data
-        setContributors(mockContributors);
+        const data = await response.json();
+        console.log('Contributors fetched successfully:', data);
+        setContributors(data);
       } catch (error) {
         console.error('Error fetching contributors:', error);
+        setError('Failed to load contributors. Using mock data instead.');
+        // Fallback to mock data if API request fails
+        setContributors(mockContributors);
       } finally {
         setIsLoading(false);
       }
@@ -334,6 +132,15 @@ const Contributor = () => {
             )}
           </div>
         </motion.div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="text-center mb-8">
+            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          </div>
+        )}
 
         {/* Loading State */}
         {isLoading && (
@@ -472,14 +279,14 @@ const Contributor = () => {
           </motion.div>
         )}
 
-        {/* Contributor Details Modal - Troubleshooting version */}
+        {/* Contributor Details Modal */}
         {selectedContributor && (
           <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
             <div 
               className="bg-white rounded-lg p-6 w-full max-w-[600px] max-h-[85vh] overflow-y-auto" 
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close button */}
+              {/* Rest of the modal code remains unchanged */}
               <div className="flex justify-end mb-2">
                 <button 
                   onClick={() => setSelectedContributor(null)}

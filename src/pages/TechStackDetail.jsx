@@ -826,6 +826,37 @@ const TechStackDetail = () => {
             </motion.div>
           </TabsContent>
         </Tabs>
+        
+        {/* Tech Stack Correction Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          className={`mt-12 border rounded-lg p-6 ${platform.color}`}
+        >
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-center">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${platform.accentColor} text-white mr-4`}>
+                <Search className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">Spot a mistake or have an update?</h3>
+                <p className="text-gray-600 max-w-2xl">
+                  Our tech stacks are maintained by the community. If you have more accurate information
+                  about {platform.name}'s technology stack, please let us know.
+                </p>
+              </div>
+            </div>
+            <a 
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfnoob6M9Cy0CBgrNyfIvBxL5-zQ0g1DV20BdBjFEVRBZUp_g/viewform?usp=sharing" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={`px-5 py-2.5 rounded-lg bg-gradient-to-r ${platform.accentColor} text-white font-medium text-sm shadow-sm hover:shadow-md transition-all whitespace-nowrap`}
+            >
+              Submit Correction
+            </a>
+          </div>
+        </motion.div>
       </div>
     </Layout>
   );
