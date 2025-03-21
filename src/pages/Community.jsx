@@ -1,9 +1,13 @@
 import React from 'react'
+import { Layout } from '@/components/Layout'
 
 const Community = () => {
   return (
-    <div>Community</div>
+   <Layout></Layout>
   )
 }
 
 export default Community
+
+
+

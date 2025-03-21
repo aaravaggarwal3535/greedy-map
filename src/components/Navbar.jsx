@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, LogOut } from 'lucide-react';
+import { Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import './Navbar.css'; // You'll need to create this file or use inline styles
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -68,12 +71,10 @@ export const Navbar = () => {
 
   const navLinks = [
     { path: "/", label: "Home" },
-    { path: "/platforms", label: "Platforms" },
-    { path: "/learning", label: "Learning" },
-    { path: "/roadmap", label: "Roadmap" },
     { path: "/community", label: "Community" },
-    { path: "/projects", label: "Projects" },
-    { path: "/contributor", label: "Contributor" }
+    { path: "/roadmap", label: "Roadmap" },
+    { path: "/contributor", label: "Contributor" },
+    { path: "/skills", label: "Skills" }
   ];
 
   // Simplified mobile menu animation variants
@@ -94,6 +95,20 @@ export const Navbar = () => {
 
   // Only make navbar transparent when at top of home page
   const showTransparentNavbar = isHomePage && !isScrolled;
+
+  // Add this effect to handle clicks outside the dropdown
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <>
@@ -147,6 +162,58 @@ export const Navbar = () => {
                 </Link>
               </div>
             ))}
+            <div className="dropdown" ref={dropdownRef}>
+              <button 
+                className={`dropdownBtn relative text-sm font-medium transition-colors px-2 py-1 flex items-center gap-1 ${
+                  showTransparentNavbar ? 'text-white' : 'text-gray-700 hover:text-blue-600'
+                }`}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                onMouseEnter={() => setIsDropdownOpen(true)}
+              >
+                <span className={showTransparentNavbar ? 'text-white' : ''}>Resources</span>
+                <ChevronDown 
+                  className={`h-4 w-4 transition-transform ${
+                    isDropdownOpen ? 'rotate-180' : ''
+                  } ${
+                    showTransparentNavbar ? 'text-white' : ''
+                  }`} 
+                />
+              </button>
+              {isDropdownOpen && (
+                <div 
+                  className="dropdown-content absolute right-0 mt-2 py-2 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                  onMouseLeave={() => setIsDropdownOpen(false)}
+                >
+                  <Link to="/platforms" className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <div className="font-medium">Platform</div>
+                        <div className="text-xs text-gray-500">Explore development platforms</div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
+                    </div>
+                  </Link>
+                  <Link to="/learning" className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <div className="font-medium">Learning</div>
+                        <div className="text-xs text-gray-500">Educational resources & guides</div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
+                    </div>
+                  </Link>
+                  <Link to="/projects" className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <div className="font-medium">Projects</div>
+                        <div className="text-xs text-gray-500">Practical project examples</div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
           </nav>
           
           {/* Right side items - Auth */}
@@ -254,6 +321,51 @@ export const Navbar = () => {
                     </Link>
                   </div>
                 ))}
+                <div className="flex justify-between items-center p-3 rounded-md hover:bg-gray-50">
+                  <span>Resources</span>
+                  <ChevronDown className="h-4 w-4" />
+                </div>
+                <div className="ml-4 flex flex-col gap-1">
+                  <Link 
+                    to="/platforms" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 text-sm text-gray-600 hover:text-blue-600"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <div>Platform</div>
+                        <div className="text-xs text-gray-500">Explore development platforms</div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 ml-2 rotate-270" />
+                    </div>
+                  </Link>
+                  <Link 
+                    to="/learning" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 text-sm text-gray-600 hover:text-blue-600"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <div>Learning</div>
+                        <div className="text-xs text-gray-500">Educational resources & guides</div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 ml-2 rotate-270" />
+                    </div>
+                  </Link>
+                  <Link 
+                    to="/projects" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 text-sm text-gray-600 hover:text-blue-600"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <div>Projects</div>
+                        <div className="text-xs text-gray-500">Practical project examples</div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 ml-2 rotate-270" />
+                    </div>
+                  </Link>
+                </div>
               </nav>
               
               <div className="border-t border-gray-200 my-2"></div>
@@ -295,7 +407,8 @@ export const Navbar = () => {
                       to="/signup"
                       onClick={() => setMobileMenuOpen(false)}
                       className="w-full"
-                    >
+                    ></Link>
+                    <Link>
                       <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700">
                         Sign Up
                       </Button>
