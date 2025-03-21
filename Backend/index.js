@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import User from './models/User.js';
 import Post from './models/Post.js';
+import projectsRouter from './routes/projects.js'; // Import the new router
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -40,6 +41,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.sendFile('templates/index.html', { root: __dirname });
 });
+
+// Add the projects route
+app.use('/api/projects', projectsRouter);
 
 // Update the signin response to include more user details
 app.post("/signin", async (req, res) => {
@@ -148,6 +152,31 @@ app.get('/contributor', async (req, res) => {
     res.status(500).json({ status: 'error', message: 'Failed to fetch contributors' });
   }
 });
+
+// This is commented out because it's handled in projectsRouter
+/*
+router.get('/:id', async (req, res) => {
+  try {
+    const project = await Project.findOne({ 
+      id: req.params.id 
+    });
+    
+    if (!project) {
+      // Mock data response when project not found
+      return res.json({
+        id: req.params.id,
+        title: req.params.id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        // More mock data...
+      });
+    }
+    
+    res.json(project);
+  } catch (error) {
+    console.error('Error fetching project details:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+*/
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

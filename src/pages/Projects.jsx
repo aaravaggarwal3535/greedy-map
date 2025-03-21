@@ -6,9 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FiCode, FiDatabase, FiLayers, FiSmartphone, FiCloud, FiServer, FiGithub, FiExternalLink, FiBookmark, FiSearch, FiFilter } from 'react-icons/fi';
-import { motion } from 'framer-motion';
-import { toast } from 'sonner'; // Add this import for toast notifications
+import { FiCode, FiDatabase, FiLayers, FiSmartphone, FiCloud, FiServer, FiGithub, FiExternalLink, FiBookmark, FiSearch, FiFilter, FiInfo, FiX } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 const difficultyColors = {
   Beginner: 'bg-green-100 text-green-800 border-green-200',
@@ -19,11 +20,10 @@ const difficultyColors = {
 const Projects = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('All');
-  const [projectData, setProjectData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   
-  // Project data organized by category
+  // Project data organized by category with realistic GitHub links
   const projectCategories = {
     "Frontend": {
       icon: <FiCode className="h-5 w-5" />,
@@ -36,7 +36,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "2-3 days",
-            githubUrl: "https://github.com/example/portfolio-template",
+            githubUrl: "https://github.com/facebook/create-react-app",
             demoUrl: "https://portfolio-example.netlify.app",
             learningOutcomes: ["Responsive design", "CSS Grid/Flexbox", "Basic JavaScript"]
           },
@@ -46,7 +46,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "1-2 days",
-            githubUrl: "https://github.com/example/todo-app",
+            githubUrl: "https://github.com/tastejs/todomvc",
             demoUrl: "https://todo-app-example.netlify.app",
             learningOutcomes: ["DOM manipulation", "Event handling", "Local Storage"]
           },
@@ -138,7 +138,7 @@ const Projects = () => {
             technologies: ["React", "CSS Modules", "Context API"],
             difficulty: "Intermediate",
             timeEstimate: "4-5 days",
-            githubUrl: "https://github.com/example/product-page",
+            githubUrl: "https://github.com/vercel/commerce",
             demoUrl: "https://product-page-example.netlify.app",
             learningOutcomes: ["Component composition", "State management", "Custom hooks"]
           },
@@ -240,7 +240,7 @@ const Projects = () => {
             technologies: ["Next.js", "Redux Toolkit", "Stripe", "Tailwind CSS"],
             difficulty: "Advanced",
             timeEstimate: "3-4 weeks",
-            githubUrl: "https://github.com/example/ecommerce-platform",
+            githubUrl: "https://github.com/vercel/commerce",
             demoUrl: "https://ecommerce-example.vercel.app",
             learningOutcomes: ["SSR/SSG", "Complex state management", "Payment integration", "Performance optimization"]
           },
@@ -348,7 +348,7 @@ const Projects = () => {
             technologies: ["Node.js", "Express", "MongoDB"],
             difficulty: "Beginner",
             timeEstimate: "2-3 days",
-            githubUrl: "https://github.com/example/rest-api",
+            githubUrl: "https://github.com/expressjs/express",
             demoUrl: "https://rest-api-example.herokuapp.com",
             learningOutcomes: ["RESTful principles", "Express middleware", "Database operations"]
           },
@@ -450,7 +450,7 @@ const Projects = () => {
             technologies: ["Node.js", "Express", "MongoDB", "Stripe API"],
             difficulty: "Intermediate",
             timeEstimate: "2-3 weeks",
-            githubUrl: "https://github.com/example/ecommerce-api",
+            githubUrl: "https://github.com/medusajs/medusa",
             demoUrl: "https://ecommerce-api-example.herokuapp.com",
             learningOutcomes: ["Complex data modeling", "Payment processing", "Order workflow"]
           },
@@ -1001,12 +1001,6 @@ const Projects = () => {
     }
   };
   
-  // Replace the current useEffect with this simplified version
-  useEffect(() => {
-    // Just use the static project data instead of fetching
-    setProjectData(projectCategories);
-  }, []);
-  
   const getCategoryIcon = (category) => {
     switch(category) {
       case 'Frontend': return <FiCode className="h-5 w-5" />;
@@ -1033,7 +1027,7 @@ const Projects = () => {
 
   // Filter projects based on search term
   const getFilteredProjects = () => {
-    const data = Object.keys(projectData).length > 0 ? projectData : projectCategories;
+    const data = projectCategories;
     
     const filtered = {};
     
@@ -1056,7 +1050,8 @@ const Projects = () => {
       
       if (Object.keys(filteredProjects).length > 0) {
         filtered[category] = {
-          ...categoryData,
+          icon: getCategoryIcon(category),
+          description: getCategoryDescription(category),
           projects: filteredProjects
         };
       }
@@ -1070,15 +1065,30 @@ const Projects = () => {
     // Already filtered by the getFilteredProjects function
   };
 
+  // Handle navigation to project detail page
+  const handleViewDetails = (project) => {
+    navigate(`/projects/${encodeURIComponent(project.title)}`);
+  };
+
   const filteredProjects = getFilteredProjects();
   const hasProjects = Object.keys(filteredProjects).length > 0;
+
+  // Simulating loading effect for better UX
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <Layout>
       <div className="container px-4 py-8">
-        <div className="max-w-3xl mx-auto text-center mb-10">
-          <h1 className="text-4xl font-bold mb-4">Project Ideas</h1>
-          <p className="text-lg text-gray-600 mb-6">
+        <div className="max-w-5xl mx-auto text-center mb-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Project Ideas</h1>
+          <p className="text-lg text-gray-600 mb-6 max-w-3xl mx-auto">
             Browse through our collection of project ideas to practice and enhance your development skills.
             From beginner to advanced, find the perfect project to build your portfolio.
           </p>
@@ -1092,16 +1102,16 @@ const Projects = () => {
                   placeholder="Search projects by title, description or technology..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 rounded-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 />
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               </div>
             </form>
             
             <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] rounded-full border-gray-300 shadow-sm">
                 <div className="flex items-center gap-2">
-                  <FiFilter className="h-4 w-4" />
+                  <FiFilter className="h-4 w-4 text-gray-500" />
                   <span>Difficulty: {difficultyFilter}</span>
                 </div>
               </SelectTrigger>
@@ -1119,13 +1129,6 @@ const Projects = () => {
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
-        ) : error ? (
-          <div className="text-center py-12">
-            <div className="bg-red-100 text-red-800 p-4 rounded-lg inline-block">
-              <p className="font-medium">Error loading projects</p>
-              <p className="text-sm">{error}</p>
-            </div>
-          </div>
         ) : !hasProjects ? (
           <div className="text-center py-16">
             <div className="inline-block p-4 rounded-full bg-gray-100 mb-4">
@@ -1138,9 +1141,13 @@ const Projects = () => {
           </div>
         ) : (
           <Tabs defaultValue={Object.keys(filteredProjects)[0]} className="w-full">
-            <TabsList className="flex w-full overflow-x-auto justify-start mb-8 pb-2">
+            <TabsList className="flex w-full overflow-x-auto justify-start mb-8 pb-2 space-x-2">
               {Object.entries(filteredProjects).map(([category, { icon }]) => (
-                <TabsTrigger key={category} value={category} className="flex items-center gap-2">
+                <TabsTrigger 
+                  key={category} 
+                  value={category} 
+                  className="flex items-center gap-2 px-4 py-2 rounded-full data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                >
                   {icon} {category}
                 </TabsTrigger>
               ))}
@@ -1149,7 +1156,7 @@ const Projects = () => {
             {Object.entries(filteredProjects).map(([category, { description, projects }]) => (
               <TabsContent key={category} value={category} className="mt-0">
                 <div className="mb-8">
-                  <p className="text-gray-600">{description}</p>
+                  <p className="text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-100">{description}</p>
                 </div>
                 
                 {Object.entries(projects).map(([difficulty, projectList]) => (
@@ -1169,9 +1176,28 @@ const Projects = () => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.05 }}
                         >
-                          <Card className="h-full flex flex-col">
+                          <Card className="h-full flex flex-col hover:shadow-lg transition-shadow border-gray-200 overflow-hidden group">
+                            <div className={`h-2 w-full ${
+                              difficulty === 'Beginner' ? 'bg-gradient-to-r from-green-400 to-green-500' :
+                              difficulty === 'Intermediate' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' :
+                              'bg-gradient-to-r from-red-400 to-red-500'
+                            }`}></div>
                             <CardHeader>
-                              <CardTitle className="font-bold">{project.title}</CardTitle>
+                              <CardTitle className="font-bold text-gray-800 group-hover:text-blue-600 transition-colors flex justify-between items-center">
+                                <span>{project.title}</span>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="h-8 w-8 p-0 rounded-full"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleViewDetails(project);
+                                  }}
+                                >
+                                  <FiInfo className="h-4 w-4" />
+                                  <span className="sr-only">Details</span>
+                                </Button>
+                              </CardTitle>
                               <CardDescription>{project.description}</CardDescription>
                             </CardHeader>
                             <CardContent className="flex-grow">
@@ -1193,18 +1219,23 @@ const Projects = () => {
                               
                               <div>
                                 <p className="text-sm font-medium mb-1">Learning Outcomes:</p>
-                                <ul className="list-disc list-inside text-sm space-y-1">
-                                  {project.learningOutcomes.map((outcome, i) => (
+                                <ul className="list-disc list-inside text-sm space-y-1 text-gray-700">
+                                  {project.learningOutcomes.slice(0, 3).map((outcome, i) => (
                                     <li key={i}>{outcome}</li>
                                   ))}
+                                  {project.learningOutcomes.length > 3 && (
+                                    <li className="text-blue-600 cursor-pointer" onClick={() => handleViewDetails(project)}>
+                                      +{project.learningOutcomes.length - 3} more outcomes...
+                                    </li>
+                                  )}
                                 </ul>
                               </div>
                             </CardContent>
-                            <CardFooter className="flex gap-2 pt-2">
+                            <CardFooter className="flex gap-2 pt-2 border-t">
                               <Button 
                                 variant="outline" 
                                 size="sm" 
-                                className="flex-1 gap-1"
+                                className="flex-1 gap-1 bg-gray-50 hover:bg-gray-100"
                                 asChild
                               >
                                 <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
@@ -1216,7 +1247,7 @@ const Projects = () => {
                               <Button 
                                 variant="outline" 
                                 size="sm" 
-                                className="flex-1 gap-1"
+                                className="flex-1 gap-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
                                 asChild
                               >
                                 <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
@@ -1228,7 +1259,7 @@ const Projects = () => {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="px-2"
+                                className="px-2 text-gray-600 hover:text-blue-600"
                                 onClick={() => {
                                   navigator.clipboard.writeText(project.title);
                                   toast.success('Project name copied to clipboard');
@@ -1251,7 +1282,6 @@ const Projects = () => {
       </div>
     </Layout>
   );
-  
 };
 
 export default Projects;

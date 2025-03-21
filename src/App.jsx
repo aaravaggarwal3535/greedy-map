@@ -15,9 +15,11 @@ import Roadmap from "./pages/Roadmap";
 import Projects from "./pages/Projects";
 import Contributor from "./pages/Contributor";
 import TechStackDetail from "./pages/TechStackDetail";
+import Dashboard from "./pages/Dashboard"; // Import the Dashboard component
 import { ReactFlowProvider } from "@xyflow/react";
 import '@xyflow/react/dist/style.css';
 import Skills from "./pages/Skills";
+import ProjectDetail from "./pages/ProjectDetail"; // Import the ProjectDetail component
 
 const queryClient = new QueryClient();
 
@@ -38,7 +40,9 @@ const App = () => (
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:projectTitle" element={<ProjectDetail />} /> {/* Add project detail route */}
             <Route path="/contributor" element={<Contributor />} />
+            <Route path="/dashboard" element={<Dashboard />} /> {/* Add Dashboard route */}
             <Route path="/techstack/:platformId" element={<TechStackDetail />} />
             <Route path="/skills" element={<Skills />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
