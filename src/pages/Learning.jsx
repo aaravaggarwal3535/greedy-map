@@ -1,19 +1,39 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/Layout";
-import { FiSearch, FiX, FiChevronDown, FiLink } from "react-icons/fi";
+import { FiSearch, FiX, FiChevronDown, FiLink, FiCheck, FiVideo, FiBook, FiList } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils"
 
 const Learning = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCategories, setFilteredCategories] = useState([]);
   const [expandedCategory, setExpandedCategory] = useState(null);
+  const [activeResourceTab, setActiveResourceTab] = useState("documentation");
+  const [activeLevelTab, setActiveLevelTab] = useState("beginner");
+  const [progress, setProgress] = useState({});
   const searchInputRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Load progress from localStorage on mount
+  useEffect(() => {
+    const savedProgress = localStorage.getItem('learningProgress');
+    if (savedProgress) {
+      setProgress(JSON.parse(savedProgress));
+    }
+  }, []);
+
+  // Save progress to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('learningProgress', JSON.stringify(progress));
+  }, [progress]);
+  
   // Category images mapping
   const categoryImages = {
     "Frontend Development":
@@ -50,6 +70,34 @@ const Learning = () => {
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
   };
 
+  // Calculate progress percentage for a category
+  const calculateCategoryProgress = (categoryName) => {
+    const category = courseCategories.find(cat => cat.name === categoryName);
+    if (!category) return 0;
+    
+    let totalItems = 0;
+    let completedItems = 0;
+    
+    category.courses.forEach(course => {
+      totalItems += 4; // Doc + 3 video levels
+      if (progress[`${course.title}-doc`]) completedItems++;
+      if (progress[`${course.title}-beginner`]) completedItems++;
+      if (progress[`${course.title}-intermediate`]) completedItems++;
+      if (progress[`${course.title}-advanced`]) completedItems++;
+    });
+    
+    return totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
+  };
+
+  // Toggle completion status
+  const toggleCompletion = (courseTitle, resourceType) => {
+    const key = `${courseTitle}-${resourceType}`;
+    setProgress(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
+
   const courseCategories = [
     {
       name: "Programming Languages",
@@ -58,8 +106,21 @@ const Learning = () => {
           title: "JavaScript",
           documentation:
             "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+          videos: {
+            beginner: "https://www.youtube.com/watch?v=jS4aFq5-91M",
+            intermediate: "https://www.youtube.com/watch?v=W6NZfCO5SIk", 
+            advanced: "https://www.youtube.com/watch?v=R9I85RhI7Cg"
+          }
         },
-        { title: "Python", documentation: "https://docs.python.org/3/" },
+        { 
+          title: "Python", 
+          documentation: "https://docs.python.org/3/",
+          videos: {
+            beginner: "https://www.youtube.com/watch?v=_uQrJ0TkZlc",
+            intermediate: "https://www.youtube.com/watch?v=rfscVS0vtbw", 
+            advanced: "https://www.youtube.com/watch?v=HGOBQPFzWKo"
+          }
+        },
         { title: "Java", documentation: "https://docs.oracle.com/en/java/" },
         { title: "C++", documentation: "https://en.cppreference.com/w/" },
         {
@@ -1105,9 +1166,22 @@ const Learning = () => {
                       <h2 className="text-xl font-semibold text-gray-800">
                         {category.name}
                       </h2>
-                      <p className="text-gray-500 text-sm">
-                        {category.courses.length} technologies
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-gray-500 text-sm">
+                          {category.courses.length} technologies
+                        </p>
+                        
+                        {/* Progress percentage */}
+                        <div className="text-xs font-medium text-blue-600">
+                          {calculateCategoryProgress(category.name).toFixed(0)}% complete
+                        </div>
+                      </div>
+                      
+                      {/* Progress bar */}
+                      <Progress 
+                        value={calculateCategoryProgress(category.name)} 
+                        className="h-1 mt-2" 
+                      />
                     </div>
                     <motion.div
                       animate={{
@@ -1142,6 +1216,7 @@ const Learning = () => {
                         <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       </div>
 
+                      {/* Combined resource grid */}
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {category.courses.map((course, i) => (
                           <motion.div
@@ -1151,17 +1226,109 @@ const Learning = () => {
                             transition={{ duration: 0.2, delay: i * 0.03 }}
                             className="bg-gradient-to-br from-gray-50 to-white border rounded-lg p-4 hover:shadow-md transition-all hover:border-blue-200"
                           >
-                            <h3 className="text-lg font-medium text-gray-800 mb-2">
+                            <h3 className="text-lg font-medium text-gray-800 mb-3">
                               {course.title}
                             </h3>
-                            <a
-                              href={course.documentation}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium hover:underline"
-                            >
-                              Documentation <span className="ml-1">→</span>
-                            </a>
+                            
+                            {/* Documentation */}
+                            <div className="flex justify-between items-center mb-2 py-1 border-b border-gray-100">
+                              <a
+                                href={course.documentation}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium hover:underline"
+                              >
+                                <FiBook className="mr-2" /> Documentation
+                              </a>
+                              <Checkbox 
+                                id={`${course.title}-doc`}
+                                checked={progress[`${course.title}-doc`] || false}
+                                onCheckedChange={() => toggleCompletion(course.title, 'doc')}
+                              />
+                            </div>
+                            
+                            {/* Beginner Video */}
+                            {course.videos?.beginner && (
+                              <div className="flex justify-between items-center mb-2 py-1 border-b border-gray-100">
+                                <a
+                                  href={course.videos.beginner}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium hover:underline"
+                                >
+                                  <FiVideo className="mr-2" /> Beginner Video
+                                </a>
+                                <Checkbox 
+                                  id={`${course.title}-beginner`}
+                                  checked={progress[`${course.title}-beginner`] || false}
+                                  onCheckedChange={() => toggleCompletion(course.title, 'beginner')}
+                                />
+                              </div>
+                            )}
+                            
+                            {/* Intermediate Video */}
+                            {course.videos?.intermediate && (
+                              <div className="flex justify-between items-center mb-2 py-1 border-b border-gray-100">
+                                <a
+                                  href={course.videos.intermediate}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium hover:underline"
+                                >
+                                  <FiVideo className="mr-2" /> Intermediate Video
+                                </a>
+                                <Checkbox 
+                                  id={`${course.title}-intermediate`}
+                                  checked={progress[`${course.title}-intermediate`] || false}
+                                  onCheckedChange={() => toggleCompletion(course.title, 'intermediate')}
+                                />
+                              </div>
+                            )}
+                            
+                            {/* Advanced Video */}
+                            {course.videos?.advanced && (
+                              <div className="flex justify-between items-center py-1">
+                                <a
+                                  href={course.videos.advanced}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium hover:underline"
+                                >
+                                  <FiVideo className="mr-2" /> Advanced Video
+                                </a>
+                                <Checkbox 
+                                  id={`${course.title}-advanced`}
+                                  checked={progress[`${course.title}-advanced`] || false}
+                                  onCheckedChange={() => toggleCompletion(course.title, 'advanced')}
+                                />
+                              </div>
+                            )}
+                            
+                            {/* Progress indicator */}
+                            <div className="mt-3 pt-2">
+                              <div className="flex justify-between text-xs text-gray-500 mb-1">
+                                <span>Progress</span>
+                                <span>
+                                  {(((progress[`${course.title}-doc`] ? 1 : 0) + 
+                                    (progress[`${course.title}-beginner`] ? 1 : 0) + 
+                                    (progress[`${course.title}-intermediate`] ? 1 : 0) + 
+                                    (progress[`${course.title}-advanced`] ? 1 : 0)) / 
+                                    (1 + (course.videos?.beginner ? 1 : 0) + 
+                                    (course.videos?.intermediate ? 1 : 0) + 
+                                    (course.videos?.advanced ? 1 : 0)) * 100).toFixed(0)}%
+                                </span>
+                              </div>
+                              <Progress 
+                                value={(((progress[`${course.title}-doc`] ? 1 : 0) + 
+                                  (progress[`${course.title}-beginner`] ? 1 : 0) + 
+                                  (progress[`${course.title}-intermediate`] ? 1 : 0) + 
+                                  (progress[`${course.title}-advanced`] ? 1 : 0)) / 
+                                  (1 + (course.videos?.beginner ? 1 : 0) + 
+                                  (course.videos?.intermediate ? 1 : 0) + 
+                                  (course.videos?.advanced ? 1 : 0)) * 100)} 
+                                className="h-1" 
+                              />
+                            </div>
                           </motion.div>
                         ))}
                       </div>

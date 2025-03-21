@@ -17,6 +17,7 @@ import Contributor from "./pages/Contributor";
 import TechStackDetail from "./pages/TechStackDetail";
 import { ReactFlowProvider } from "@xyflow/react";
 import '@xyflow/react/dist/style.css';
+import Skills from "./pages/Skills";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/projects" element={<Projects />} />
             <Route path="/contributor" element={<Contributor />} />
             <Route path="/techstack/:platformId" element={<TechStackDetail />} />
+            <Route path="/skills" element={<Skills />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

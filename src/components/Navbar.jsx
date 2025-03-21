@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import './Navbar.css'; // You'll need to create this file or use inline styles
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -10,6 +11,7 @@ export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -71,7 +73,8 @@ export const Navbar = () => {
     { path: "/", label: "Home" },
     { path: "/community", label: "Community" },
     { path: "/roadmap", label: "Roadmap" },
-    { path: "/contributor", label: "Contributor" }
+    { path: "/contributor", label: "Contributor" },
+    { path: "/skills", label: "Skills" }
   ];
 
   // Simplified mobile menu animation variants
@@ -92,6 +95,20 @@ export const Navbar = () => {
 
   // Only make navbar transparent when at top of home page
   const showTransparentNavbar = isHomePage && !isScrolled;
+
+  // Add this effect to handle clicks outside the dropdown
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <>
@@ -145,14 +162,13 @@ export const Navbar = () => {
                 </Link>
               </div>
             ))}
-            <div className="dropdown">
+            <div className="dropdown" ref={dropdownRef}>
               <button 
                 className={`dropdownBtn relative text-sm font-medium transition-colors px-2 py-1 flex items-center gap-1 ${
                   showTransparentNavbar ? 'text-white' : 'text-gray-700 hover:text-blue-600'
                 }`}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 onMouseEnter={() => setIsDropdownOpen(true)}
-                onMouseLeave={() => setIsDropdownOpen(false)}
               >
                 <span className={showTransparentNavbar ? 'text-white' : ''}>Resources</span>
                 <ChevronDown 
@@ -163,39 +179,40 @@ export const Navbar = () => {
                   }`} 
                 />
               </button>
-              <div 
-                className={`dropdown-content ${isDropdownOpen ? 'show' : ''}`}
-                onMouseEnter={() => setIsDropdownOpen(true)}
-                onMouseLeave={() => setIsDropdownOpen(false)}
-              >
-                <Link to="/platforms" className="dropdown-item">
-                  <div className="flex items-center justify-between w-full">
-                    <div>
-                      <div className="font-medium">Platform</div>
-                      <div className="text-xs text-gray-500">Explore development platforms</div>
+              {isDropdownOpen && (
+                <div 
+                  className="dropdown-content absolute right-0 mt-2 py-2 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                  onMouseLeave={() => setIsDropdownOpen(false)}
+                >
+                  <Link to="/platforms" className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <div className="font-medium">Platform</div>
+                        <div className="text-xs text-gray-500">Explore development platforms</div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
                     </div>
-                    <ChevronDown className="h-4 w-4 ml-2 rotate-270" />
-                  </div>
-                </Link>
-                <Link to="/learning" className="dropdown-item">
-                  <div className="flex items-center justify-between w-full">
-                    <div>
-                      <div className="font-medium">Learning</div>
-                      <div className="text-xs text-gray-500">Educational resources & guides</div>
+                  </Link>
+                  <Link to="/learning" className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <div className="font-medium">Learning</div>
+                        <div className="text-xs text-gray-500">Educational resources & guides</div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
                     </div>
-                    <ChevronDown className="h-4 w-4 ml-2 rotate-270" />
-                  </div>
-                </Link>
-                <Link to="/projects" className="dropdown-item">
-                  <div className="flex items-center justify-between w-full">
-                    <div>
-                      <div className="font-medium">Projects</div>
-                      <div className="text-xs text-gray-500">Practical project examples</div>
+                  </Link>
+                  <Link to="/projects" className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <div className="flex items-center justify-between w-full">
+                      <div>
+                        <div className="font-medium">Projects</div>
+                        <div className="text-xs text-gray-500">Practical project examples</div>
+                      </div>
+                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
                     </div>
-                    <ChevronDown className="h-4 w-4 ml-2 rotate-270" />
-                  </div>
-                </Link>
-              </div>
+                  </Link>
+                </div>
+              )}
             </div>
           </nav>
           
@@ -319,7 +336,7 @@ export const Navbar = () => {
                         <div>Platform</div>
                         <div className="text-xs text-gray-500">Explore development platforms</div>
                       </div>
-                      <ChevronDown className="h-4 w-4 ml-2 rotate-270" />
+                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
                     </div>
                   </Link>
                   <Link 
@@ -332,7 +349,7 @@ export const Navbar = () => {
                         <div>Learning</div>
                         <div className="text-xs text-gray-500">Educational resources & guides</div>
                       </div>
-                      <ChevronDown className="h-4 w-4 ml-2 rotate-270" />
+                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
                     </div>
                   </Link>
                   <Link 
@@ -345,7 +362,7 @@ export const Navbar = () => {
                         <div>Projects</div>
                         <div className="text-xs text-gray-500">Practical project examples</div>
                       </div>
-                      <ChevronDown className="h-4 w-4 ml-2 rotate-270" />
+                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
                     </div>
                   </Link>
                 </div>

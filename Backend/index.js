@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import User from './models/User.js';
+import Post from './models/Post.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,7 +42,6 @@ app.get('/', (req, res) => {
 });
 
 // Update the signin response to include more user details
-
 app.post("/signin", async (req, res) => {
   console.log(req.body);
   
@@ -133,8 +133,6 @@ app.post("/signup", async (req, res) => {
     });
   }
 });
-
-// Add this after your existing middleware and routes
 
 // Get all contributors
 app.get('/contributor', async (req, res) => {
