@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Layout } from '@/components/Layout';
-import { FaThumbsUp, FaThumbsDown, FaFlag, FaReply, FaImage, FaHashtag, FaSearch, FaBell, FaCode, FaDatabase, FaGamepad, FaMobile, FaCloud, FaStar, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaThumbsUp, FaThumbsDown, FaFlag, FaReply, FaImage, FaHashtag, FaSearch, FaBell, FaCode, FaDatabase, FaGamepad, FaMobile, FaCloud, FaStar, FaPlus, FaTimes, FaLock, FaSignInAlt } from 'react-icons/fa';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const API_URL = 'http://localhost:3000'; // Your backend URL
 
 const Community = () => {
+  const navigate = useNavigate();
+  
   // Enhanced community categories
   const [communities, setCommunities] = useState([
     { id: 'frontend', name: 'Frontend', icon: <FaCode />, active: true },
@@ -32,6 +36,7 @@ const Community = () => {
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [activeTab, setActiveTab] = useState('frontend');
   const [newPost, setNewPost] = useState('');
@@ -45,11 +50,12 @@ const Community = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const textareaRef = useRef(null);
   
-  // User info - would come from auth context in a real app
-  // For now, we'll use local storage to check if user is logged in
+  // User info - empty by default, will be populated if logged in
   const [currentUser, setCurrentUser] = useState({
-    name: 'Guest User',
-    role: 'Visitor'
+    id: '',
+    name: '',
+    email: '',
+    role: ''
   });
 
   // Load posts for current category when tab changes
@@ -86,15 +92,30 @@ const Community = () => {
     if (userData) {
       try {
         const parsedUser = JSON.parse(userData);
-        if (parsedUser && parsedUser.fullName) {
+        if (parsedUser && parsedUser.id && parsedUser.fullName && parsedUser.email) {
           setCurrentUser({
+            id: parsedUser.id,
             name: parsedUser.fullName,
+            email: parsedUser.email,
             role: 'Member' // You can enhance this with actual user roles if implemented
           });
+          setIsAuthenticated(true);
+          console.log('User authenticated:', parsedUser.fullName);
+        } else {
+          // Invalid user data - missing required fields
+          console.log('Invalid user data in localStorage');
+          setIsAuthenticated(false);
+          setCurrentUser({ id: '', name: '', email: '', role: '' });
         }
       } catch (e) {
         console.error('Error parsing user data from localStorage', e);
+        setIsAuthenticated(false);
+        setCurrentUser({ id: '', name: '', email: '', role: '' });
       }
+    } else {
+      console.log('No user data in localStorage');
+      setIsAuthenticated(false);
+      setCurrentUser({ id: '', name: '', email: '', role: '' });
     }
   }, []);
 
@@ -103,9 +124,19 @@ const Community = () => {
     setActiveTab(tabId);
   };
 
+  // Auth required handler
+  const handleAuthRequired = () => {
+    navigate('/login');
+  };
+
   // Post submission handler with API integration
   const handlePostSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!isAuthenticated) {
+      handleAuthRequired();
+      return;
+    }
     
     if (!newPost.trim()) return;
     
@@ -118,6 +149,7 @@ const Community = () => {
       
       // Prepare the post data
       const postData = {
+        userId: currentUser.id, // Include user ID for backend reference
         author: currentUser.name,
         role: currentUser.role,
         content: newPost,
@@ -156,11 +188,17 @@ const Community = () => {
 
   // Reply submission with API integration
   const handleReplySubmit = async (postId) => {
+    if (!isAuthenticated) {
+      handleAuthRequired();
+      return;
+    }
+    
     if (!replyContent[postId]?.trim()) return;
     
     try {
       // Prepare the reply data
       const replyData = {
+        userId: currentUser.id, // Include user ID for backend reference
         author: currentUser.name,
         role: currentUser.role,
         content: replyContent[postId]
@@ -197,9 +235,18 @@ const Community = () => {
 
   // Vote handling with API integration
   const handleVote = async (postId, replyId = null, isUpvote) => {
+    if (!isAuthenticated) {
+      handleAuthRequired();
+      return;
+    }
+    
     try {
-      // Send the vote to the backend
-      await axios.put(`${API_URL}/api/posts/${postId}/vote`, { replyId, isUpvote });
+      // Send the vote to the backend with user ID
+      await axios.put(`${API_URL}/api/posts/${postId}/vote`, { 
+        userId: currentUser.id,
+        replyId, 
+        isUpvote 
+      });
       
       // Update UI optimistically
       setPosts(prev => {
@@ -241,6 +288,11 @@ const Community = () => {
 
   // Report handler (would connect to backend in a full implementation)
   const handleReport = (postId, replyId = null) => {
+    if (!isAuthenticated) {
+      handleAuthRequired();
+      return;
+    }
+    
     alert(`Reported ${replyId ? 'reply' : 'post'}. In a real app, this would send a report to moderators.`);
   };
 
@@ -252,6 +304,11 @@ const Community = () => {
 
   // Enhanced animation functions
   const openPostInput = () => {
+    if (!isAuthenticated) {
+      handleAuthRequired();
+      return;
+    }
+    
     if (isPostInputExpanded || isAnimating) return;
     
     setIsAnimating(true);
@@ -313,16 +370,27 @@ const Community = () => {
             </button>
           </div>
           
+          {/* User profile section - conditionally render based on auth status */}
           <div className="p-4 border-t border-gray-800 bg-gray-850">
-            <div className="flex items-center">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-md">
-                {currentUser.name.charAt(0)}
+            {isAuthenticated ? (
+              <div className="flex items-center">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-md">
+                  {currentUser.name.charAt(0)}
+                </div>
+                <div className="ml-3">
+                  <div className="text-sm font-semibold text-gray-200">{currentUser.name}</div>
+                  <div className="text-xs text-gray-400">{currentUser.role}</div>
+                </div>
               </div>
-              <div className="ml-3">
-                <div className="text-sm font-semibold text-gray-200">{currentUser.name}</div>
-                <div className="text-xs text-gray-400">{currentUser.role}</div>
-              </div>
-            </div>
+            ) : (
+              <button 
+                onClick={handleAuthRequired}
+                className="w-full py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md flex items-center justify-center gap-2 transition-colors"
+              >
+                <FaSignInAlt />
+                <span>Sign in to participate</span>
+              </button>
+            )}
           </div>
         </div>
         
@@ -423,7 +491,13 @@ const Community = () => {
                             <FaThumbsDown className="text-sm" /> <span className="text-sm">{post.downvotes}</span>
                           </button>
                           <button 
-                            onClick={() => setReplyingTo(replyingTo === post._id ? null : post._id)}
+                            onClick={() => {
+                              if (!isAuthenticated) {
+                                handleAuthRequired();
+                                return;
+                              }
+                              setReplyingTo(replyingTo === post._id ? null : post._id);
+                            }}
                             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-colors ${
                               replyingTo === post._id ? "bg-indigo-50 text-indigo-600" : "hover:bg-gray-100"
                             }`}
@@ -438,7 +512,7 @@ const Community = () => {
                           </button>
                         </div>
                         
-                        {replyingTo === post._id && (
+                        {replyingTo === post._id && isAuthenticated && (
                           <div className="mt-4 pl-4 pt-4 border-t border-gray-100">
                             <div className="flex items-center gap-2 mb-3">
                               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-xs font-bold">
@@ -524,59 +598,85 @@ const Community = () => {
                         ? "No posts match your search criteria." 
                         : `Be the first to post in the ${communities.find(c => c.id === activeTab)?.name} community!`}
                     </p>
+                    {!isAuthenticated && (
+                      <div className="mt-4">
+                        <Link to="/signin">
+                        <button
+                          // onClick={handleAuthRequired}
+                          className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700"
+                          >
+                          Sign in to post
+                        </button>
+                          </Link>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             )}
           </div>
           
-          {/* Simplified bottom post input - always visible input box */}
+          {/* Bottom post input area */}
           <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg transition-all duration-300 ease-in-out transform">
             <div className="p-3 flex items-center">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-sm mr-3">
-                {currentUser.name.charAt(0)}
-              </div>
-              
-              <form onSubmit={handlePostSubmit} className="flex-1 flex items-center">
-                <div className="relative flex-1 flex items-center">
-                  <input
-                    type="text"
-                    value={newPost}
-                    onChange={(e) => setNewPost(e.target.value)}
-                    onClick={() => !isPostInputExpanded && openPostInput()}
-                    placeholder={`Share your thoughts with ${communities.find(c => c.id === activeTab)?.name}...`}
-                    className="w-full py-2 px-4 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white border border-transparent focus:border-indigo-300"
-                  />
-                  
-                  <div className="absolute right-2 flex items-center space-x-1">
-                    <label className="cursor-pointer p-2 rounded-full text-gray-500 hover:text-indigo-600 hover:bg-gray-100 transition-colors">
-                      <FaImage size={16} />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="hidden"
-                      />
-                    </label>
+              {isAuthenticated ? (
+                <>
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-sm mr-3">
+                    {currentUser.name.charAt(0)}
                   </div>
+                  
+                  <form onSubmit={handlePostSubmit} className="flex-1 flex items-center">
+                    <div className="relative flex-1 flex items-center">
+                      <input
+                        type="text"
+                        value={newPost}
+                        onChange={(e) => setNewPost(e.target.value)}
+                        onClick={() => !isPostInputExpanded && openPostInput()}
+                        placeholder={`Share your thoughts with ${communities.find(c => c.id === activeTab)?.name}...`}
+                        className="w-full py-2 px-4 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white border border-transparent focus:border-indigo-300"
+                      />
+                      
+                      <div className="absolute right-2 flex items-center space-x-1">
+                        <label className="cursor-pointer p-2 rounded-full text-gray-500 hover:text-indigo-600 hover:bg-gray-100 transition-colors">
+                          <FaImage size={16} />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                    
+                    <button
+                      type="submit"
+                      disabled={!newPost.trim()}
+                      className={`ml-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                        newPost.trim() 
+                          ? "bg-indigo-600 text-white hover:bg-indigo-700" 
+                          : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      }`}
+                    >
+                      Post
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <div className="flex-1">
+                  <button
+                    onClick={handleAuthRequired}
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition-colors"
+                  >
+                    <FaSignInAlt className="mr-2" />
+                    Sign in to join the conversation
+                  </button>
                 </div>
-                
-                <button
-                  type="submit"
-                  disabled={!newPost.trim()}
-                  className={`ml-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    newPost.trim() 
-                      ? "bg-indigo-600 text-white hover:bg-indigo-700" 
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  }`}
-                >
-                  Post
-                </button>
-              </form>
+              )}
             </div>
             
             {/* Show selected image preview if any */}
-            {selectedFile && (
+            {isAuthenticated && selectedFile && (
               <div className="px-4 pb-3 flex items-center">
                 <div className="flex-1 flex items-center bg-green-50 text-green-800 text-sm py-1 px-3 rounded-md">
                   <div className="flex-shrink-0 w-6 h-6 mr-2 bg-gray-200 rounded overflow-hidden">
