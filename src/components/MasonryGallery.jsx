@@ -1,129 +1,103 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
-// Gallery image data with sizes
+// Gallery image data with sizes - using tech-related Unsplash images
 const galleryImages = [
   {
     id: 1,
-    src: "https://images.unsplash.com/photo-1541845157-a6d2d100c931",
+    src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
     alt: "Programming Interface",
     size: "normal",
     category: "Development"
   },
   {
     id: 2,
-    src: "https://images.unsplash.com/photo-1588282322673-c31965a75c3e",
+    src: "https://plus.unsplash.com/premium_photo-1683121713210-97667d2e83c8?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Modern Technology",
     size: "normal",
     category: "Tech"
   },
   {
     id: 3,
-    src: "https://images.unsplash.com/photo-1588117472013-59bb13edafec",
+    src: "https://plus.unsplash.com/premium_photo-1683120963435-6f9355d4a776?q=80&w=1926&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "AI Processing",
     size: "tall",
     category: "AI"
   },
   {
     id: 4,
-    src: "https://images.unsplash.com/photo-1587588354456-ae376af71a25",
+    src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
     alt: "Data Visualization",
     size: "wide",
     category: "Analytics"
   },
   {
     id: 5,
-    src: "https://images.unsplash.com/photo-1558980663-3685c1d673c4",
+    src: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8",
     alt: "Cloud Computing",
     size: "normal",
     category: "Cloud"
   },
   {
     id: 6,
-    src: "https://images.unsplash.com/photo-1588499756884-d72584d84df5",
+    src: "https://images.unsplash.com/photo-1563013544-824ae1b704d3",
     alt: "Security Systems",
     size: "tall",
     category: "Security"
   },
   {
     id: 7,
-    src: "https://images.unsplash.com/photo-1588492885706-b8917f06df77",
+    src: "https://plus.unsplash.com/premium_photo-1676637656210-390da73f4951?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Neural Networks",
     size: "big",
     category: "Machine Learning"
   },
   {
     id: 8,
-    src: "https://images.unsplash.com/photo-1588247866001-68fa8c438dd7",
+    src: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c",
     alt: "Mobile Development",
     size: "normal",
     category: "Mobile"
   },
   {
     id: 9,
-    src: "https://images.unsplash.com/photo-1586521995568-39abaa0c2311",
+    src: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3",
     alt: "DevOps Pipeline",
     size: "wide",
     category: "DevOps"
   },
   {
     id: 10,
-    src: "https://images.unsplash.com/photo-1572914857229-37bf6ee8101c",
+    src: "https://images.unsplash.com/photo-1643000296927-f4f1c8722b7d?q=80&w=2089&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Blockchain Technology",
     size: "big",
     category: "Blockchain"
   },
   {
     id: 11,
-    src: "https://images.unsplash.com/photo-1588453862014-cd1a9ad06a12",
+    src: "https://images.unsplash.com/photo-1518770660439-4636190af475",
     alt: "IOT Devices",
     size: "tall",
     category: "IoT"
   },
   {
     id: 12,
-    src: "https://images.unsplash.com/photo-1588414734732-660b07304ddb",
+    src: "https://images.unsplash.com/photo-1626379961798-54f819ee896a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Virtual Reality",
     size: "normal",
     category: "VR/AR"
   },
   {
     id: 13,
-    src: "https://images.unsplash.com/photo-1588224575346-501f5880ef29",
+    src: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7",
     alt: "Cybersecurity",
     size: "normal",
     category: "Security"
   },
-  {
-    id: 14,
-    src: "https://images.unsplash.com/photo-1574798834926-b39501d8eda2",
-    alt: "Quantum Computing",
-    size: "normal",
-    category: "Quantum"
-  },
-  {
-    id: 15,
-    src: "https://images.unsplash.com/photo-1547234935-80c7145ec969",
-    alt: "Cryptocurrency",
-    size: "normal",
-    category: "Finance"
-  }
 ];
 
 const MasonryGallery = () => {
   const [hoveredItem, setHoveredItem] = useState(null);
-  const [imagesLoaded, setImagesLoaded] = useState(0);
-  const [allLoaded, setAllLoaded] = useState(false);
-
-  useEffect(() => {
-    if (imagesLoaded === galleryImages.length) {
-      setAllLoaded(true);
-    }
-  }, [imagesLoaded]);
-  
-  const handleImageLoad = () => {
-    setImagesLoaded(prev => prev + 1);
-  };
   
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -146,25 +120,20 @@ const MasonryGallery = () => {
 
   return (
     <div className="masonry-container relative">
-      {!allLoaded && (
-        <div className="loading-overlay absolute inset-0 bg-[#050816]/80 backdrop-blur-sm flex items-center justify-center z-20">
-          <div className="flex flex-col items-center">
-            <div className="w-10 h-10 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-            <p className="text-blue-400">Loading gallery...</p>
-          </div>
-        </div>
-      )}
-      
       <motion.div
-        className="masonry-grid"
+        className="grid gap-2.5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[200px] grid-flow-dense"
         variants={containerVariants}
         initial="hidden"
-        animate={allLoaded ? "visible" : "hidden"}
+        animate="visible"
       >
         {galleryImages.map((image) => (
           <motion.div
             key={image.id}
-            className={`masonry-item ${image.size}`}
+            className={`flex justify-center items-center ${
+              image.size === 'wide' ? 'col-span-2' : 
+              image.size === 'tall' ? 'row-span-2' : 
+              image.size === 'big' ? 'col-span-2 row-span-2' : ''
+            }`}
             variants={itemVariants}
             onMouseEnter={() => setHoveredItem(image.id)}
             onMouseLeave={() => setHoveredItem(null)}
@@ -174,7 +143,7 @@ const MasonryGallery = () => {
               transition: { duration: 0.3 }
             }}
           >
-            <div className="relative group overflow-hidden rounded-xl">
+            <div className="relative w-full h-full group overflow-hidden rounded-xl">
               {/* Gradient border effect on hover */}
               <motion.div 
                 className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl opacity-0 group-hover:opacity-100 blur-sm transition-opacity z-0"
@@ -183,12 +152,11 @@ const MasonryGallery = () => {
               />
               
               {/* Image */}
-              <div className="relative z-10 rounded-lg overflow-hidden">
+              <div className="relative z-10 w-full h-full rounded-lg overflow-hidden">
                 <img 
                   src={`${image.src}?auto=format&fit=crop&w=800&q=80`}
                   alt={image.alt}
                   className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
-                  onLoad={handleImageLoad}
                   loading="lazy"
                 />
                 
