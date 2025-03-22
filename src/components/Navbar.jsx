@@ -70,7 +70,7 @@ export const Navbar = () => {
 
   const navLinks = [
     { path: "/", label: "Home" },
-    { path: "/community", label: "Community" },
+    { path: "/community", label: "Community" }, 
     { path: "/roadmap", label: "Roadmap" },
     { path: "/contributor", label: "Contributor" },
     { path: "/skills", label: "Skills" }
