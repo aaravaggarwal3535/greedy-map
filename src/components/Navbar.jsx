@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import PremiumStatus from '@/components/PremiumStatus';
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,13 +20,12 @@ export const Navbar = () => {
   
   // Check if we're on the home page
   const isHomePage = location.pathname === "/";
-
+  
   // Check authentication status
   useEffect(() => {
     const checkAuthStatus = () => {
       const userId = localStorage.getItem('userId');
       const name = localStorage.getItem('userName');
-      
       if (userId) {
         setIsLoggedIn(true);
         setUserName(name || 'User');
@@ -40,10 +40,9 @@ export const Navbar = () => {
     
     // Listen for storage events (for multi-tab support)
     window.addEventListener('storage', checkAuthStatus);
-    
     return () => window.removeEventListener('storage', checkAuthStatus);
   }, [location.pathname]);
-
+  
   // Handle scroll event to change navbar appearance
   useEffect(() => {
     const handleScroll = () => {
@@ -53,11 +52,11 @@ export const Navbar = () => {
         setIsScrolled(false);
       }
     };
-
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
+  
   // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('userId');
@@ -67,7 +66,7 @@ export const Navbar = () => {
     setUserName('');
     navigate('/');
   };
-
+  
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/roadmap", label: "Roadmap" },
@@ -75,33 +74,51 @@ export const Navbar = () => {
     { path: "/skills", label: "Skills" },
     { path: "/community", label: "Community" },
   ];
-
+  
   // Simplified mobile menu animation variants
   const mobileMenuVariants = {
     closed: { 
       opacity: 0,
       transition: {
-        duration: 0.2
+        duration: 0.2,
+        ease: "easeInOut"
       }
     },
     open: { 
       opacity: 1,
       transition: {
-        duration: 0.2
+        duration: 0.3,
+        ease: "easeOut",
+        when: "beforeChildren",
+        staggerChildren: 0.05
       }
+    }
+  };
+
+  // Add animation for children items
+  const menuItemVariants = {
+    closed: { 
+      opacity: 0, 
+      y: 10,
+      transition: { duration: 0.1 }
+    },
+    open: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.3 }
     }
   };
 
   // Add dropdown animation variants
   const dropdownVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       y: -10,
       transition: {
         duration: 0.2
       }
     },
-    visible: { 
+    visible: {
       opacity: 1,
       y: 0,
       transition: {
@@ -143,7 +160,7 @@ export const Navbar = () => {
                 <div className="font-bold text-white text-xl">G</div>
               </div>
               <span className={`font-bold text-xl ${
-                showTransparentNavbar
+                showTransparentNavbar 
                   ? 'text-white'
                   : 'bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'
               }`}>
@@ -157,7 +174,7 @@ export const Navbar = () => {
             {navLinks.map((link) => (
               <div key={link.path}>
                 <Link 
-                  to={link.path} 
+                  to={link.path}
                   className={`relative text-sm font-medium transition-colors px-2 py-1 flex items-center ${
                     isActive(link.path) 
                       ? showTransparentNavbar ? 'text-white font-semibold' : 'text-blue-700'
@@ -185,7 +202,8 @@ export const Navbar = () => {
                   showTransparentNavbar ? 'text-white' : 'text-gray-700 hover:text-blue-600'
                 }`}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                onMouseEnter={() => setIsDropdownOpen(true)}
+                onMouseEnter={() => setIsDropdownOpen(true)} 
+                onMouseLeave={() => setIsDropdownOpen(false)}
               >
                 <span className={showTransparentNavbar ? 'text-white' : ''}>Resources</span>
                 <ChevronDown 
@@ -193,7 +211,7 @@ export const Navbar = () => {
                     isDropdownOpen ? 'rotate-180' : ''
                   } ${
                     showTransparentNavbar ? 'text-white' : ''
-                  }`} 
+                  }`}
                 />
               </button>
               <AnimatePresence>
@@ -240,22 +258,21 @@ export const Navbar = () => {
           </nav>
           
           {/* Right side items - Auth */}
-          
           <div className="flex items-center gap-4">
             {/* Conditional rendering based on auth status */}
             <div className="hidden md:flex gap-3">
               {isLoggedIn ? (
                 <>
-                <Link to="/Dashboard">
-                  <div className={`flex items-center gap-2 py-1 px-3 rounded-full ${
-                    showTransparentNavbar 
-                      ? 'bg-white/20 text-white'
-                      : 'bg-blue-50 text-blue-700'
-                  }`}>
-                    <User className="h-4 w-4" />
-                    <span className="text-sm font-medium">{userName}</span>
-                  </div>
-                </Link>
+                  <Link to="/Dashboard">
+                    <div className={`flex items-center gap-2 py-1 px-3 rounded-full ${
+                      showTransparentNavbar
+                        ? 'bg-white/20 text-white'
+                        : 'bg-blue-50 text-blue-700'
+                    }`}>
+                      <User className="h-4 w-4" />
+                      <span className="text-sm font-medium">{userName}</span>
+                    </div>
+                  </Link>
                   <Button 
                     variant={showTransparentNavbar ? "secondary" : "outline"}
                     size="sm"
@@ -285,7 +302,7 @@ export const Navbar = () => {
                   </Link>
                   <Link to="/signup">
                     <Button 
-                      size="sm" 
+                      size="sm"
                       className={showTransparentNavbar
                         ? "bg-white text-blue-700 hover:bg-gray-100 rounded-3xl"
                         : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-3xl shadow-sm"
@@ -298,18 +315,22 @@ export const Navbar = () => {
               )}
             </div>
             
-            {/* Mobile menu toggle */}
+            {/* Mobile menu toggle - improved for touch */}
             <div className="md:hidden">
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className={`rounded-full ${showTransparentNavbar ? 'text-white hover:bg-white/20' : ''}`}
+                className={`rounded-full p-2 w-12 h-12 ${showTransparentNavbar ? 'text-white hover:bg-white/20' : 'hover:bg-gray-100'}`}
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-menu"
               >
+                <span className="sr-only">{mobileMenuOpen ? "Close menu" : "Open menu"}</span>
                 {mobileMenuOpen ? (
-                  <X className="h-5 w-5" />
+                  <X className="h-6 w-6" />
                 ) : (
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-6 w-6" />
                 )}
               </Button>
             </div>
@@ -317,20 +338,21 @@ export const Navbar = () => {
         </div>
       </header>
 
-      {/* Mobile menu */}
+      {/* Mobile menu - improved responsive design */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            id="mobile-menu"
             initial="closed"
             animate="open"
             exit="closed"
             variants={mobileMenuVariants}
-            className="fixed inset-0 top-16 z-40 bg-white/95 backdrop-blur-sm border-t border-gray-200 md:hidden"
+            className="fixed inset-0 top-16 z-40 bg-white/95 backdrop-blur-sm border-t border-gray-200 md:hidden overflow-y-auto"
           >
-            <div className="container py-4 px-4 flex flex-col gap-3">
+            <div className="container py-4 px-4 flex flex-col gap-3 pb-safe">
               <nav className="flex flex-col gap-2">
                 {navLinks.map((link) => (
-                  <div key={link.path}>
+                  <motion.div key={link.path} variants={menuItemVariants}>
                     <Link 
                       to={link.path} 
                       onClick={() => setMobileMenuOpen(false)}
@@ -345,61 +367,61 @@ export const Navbar = () => {
                         <div className="h-2 w-2 rounded-full bg-blue-600" />
                       )}
                     </Link>
-                  </div>
+                  </motion.div>
                 ))}
-                <div className="flex justify-between items-center p-3 rounded-md hover:bg-gray-50">
-                  <span>Resources</span>
-                  <ChevronDown className="h-4 w-4" />
-                </div>
-                <div className="ml-4 flex flex-col gap-1">
-                  <Link 
-                    to="/platforms" 
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-150"
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <div>
-                        <div>Platform</div>
-                        <div className="text-xs text-gray-500">Explore development platforms</div>
+                
+                <motion.div variants={menuItemVariants}>
+                  <div className="flex justify-between items-center p-3 rounded-md hover:bg-gray-50">
+                    <span>Resources</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </div>
+                  <div className="ml-4 flex flex-col gap-1">
+                    <Link 
+                      to="/platforms" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="p-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-150"
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div>
+                          <div>Platform</div>
+                          <div className="text-xs text-gray-500">Explore development platforms</div>
+                        </div>
+                        <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
                       </div>
-                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
-                    </div>
-                  </Link>
-                  <Link 
-                    to="/learning" 
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-150"
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <div>
-                        <div>Learning</div>
-                        <div className="text-xs text-gray-500">Educational resources & guides</div>
+                    </Link>
+                    <Link 
+                      to="/learning" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="p-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-150"
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div>
+                          <div>Learning</div>
+                          <div className="text-xs text-gray-500">Educational resources & guides</div>
+                        </div>
+                        <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
                       </div>
-                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
-                    </div>
-                  </Link>
-                  <Link 
-                    to="/projects" 
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-150"
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <div>
-                        <div>Projects</div>
-                        <div className="text-xs text-gray-500">Practical project examples</div>
+                    </Link>
+                    <Link 
+                      to="/projects" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="p-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-150"
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div>
+                          <div>Projects</div>
+                          <div className="text-xs text-gray-500">Practical project examples</div>
+                        </div>
+                        <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
                       </div>
-                      <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
-                    </div>
-                  </Link>
-                </div>
+                    </Link>
+                  </div>
+                </motion.div>
               </nav>
               
               <div className="border-t border-gray-200 my-2"></div>
               
-              {/* Add Premium Status to mobile menu */}
-              <div className="flex justify-center my-2">
-                <PremiumStatus />
-              </div>
+              {/* Remove Premium Status section for mobile menu */}
               
               <div className={isLoggedIn ? "flex flex-col gap-3 mt-2" : "grid grid-cols-2 gap-3 mt-2"}>
                 {isLoggedIn ? (
@@ -428,7 +450,7 @@ export const Navbar = () => {
                       className="w-full"
                     >
                       <Button 
-                        variant="outline" 
+                        variant="outline"
                         className="w-full border-gray-300"
                       >
                         Sign In
