@@ -18,7 +18,9 @@ import {
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
 import InfiniteMenu from '@/components/InfiniteMenu';
+import MasonryGallery from '@/components/MasonryGallery';
 import '@/styles/hexagon-background.css';
+// import '@/styles/masonry.css';
 
 const Index = () => {
   const [mousePosition, setMousePosition] = useState({ x: -400, y: -400 });
@@ -554,6 +556,70 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* Technology Ecosystem Section with Proper Masonry Grid */}
+          <section className="py-24 md:py-32 relative z-10 overflow-hidden">
+            <div className="container px-4 md:px-6">
+              <div className="flex flex-col items-center space-y-4 text-center mb-16">
+                <motion.div 
+                  className="inline-flex items-center px-3 py-1 rounded-full bg-blue-950/50 border border-blue-800/50 text-blue-400 text-sm backdrop-blur-sm mb-4"
+                  initial={{ opacity: 0, y: -20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <BadgeCheck className="h-3.5 w-3.5 mr-2" />
+                  <span>Explore the tech landscape</span>
+                </motion.div>
+                
+                <motion.h2 
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter enhanced-gradient-heading mb-2"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  Technology Ecosystem
+                </motion.h2>
+                
+                <motion.p 
+                  className="mx-auto max-w-[700px] text-blue-200/80 md:text-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                >
+                  Navigate through the most popular frameworks and tools powering modern applications.
+                </motion.p>
+              </div>
+              
+              {/* Proper Masonry Grid Implementation */}
+              <motion.div 
+                className="relative"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.7 }}
+              >
+                <MasonryGallery />
+              </motion.div>
+              
+              <motion.div 
+                className="flex justify-center mt-12"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+              >
+                <Link to="/learning">
+                  <Button className="rounded-full px-8 py-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-800 group">
+                    <span className="text-lg font-medium mr-2">Explore all technologies</span>
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Button>
+                </Link>
               </motion.div>
             </div>
           </section>

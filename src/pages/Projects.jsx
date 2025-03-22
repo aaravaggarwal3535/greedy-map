@@ -55,8 +55,8 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "2-3 days",
-            githubUrl: "https://github.com/facebook/create-react-app",
-            demoUrl: "https://portfolio-example.netlify.app",
+            githubUrl: "https://github.com/AyushChoudhary6/portfolioWebsite",
+            demoUrl: "https://github.com/AyushChoudhary6/portfolioWebsite",
             learningOutcomes: ["Responsive design", "CSS Grid/Flexbox", "Basic JavaScript"]
           },
           {
@@ -65,7 +65,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "1-2 days",
-            githubUrl: "https://github.com/tastejs/todomvc",
+            githubUrl: "https://github.com/aaravaggarwal3535/todo-list-app",
             demoUrl: "https://todo-app-example.netlify.app",
             learningOutcomes: ["DOM manipulation", "Event handling", "Local Storage"]
           },
@@ -75,7 +75,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript", "Weather API"],
             difficulty: "Beginner",
             timeEstimate: "2-3 days",
-            githubUrl: "https://github.com/example/weather-app",
+            githubUrl: "https://github.com/CodeExplainedRepo/Weather-App-JavaScript",
             demoUrl: "https://weather-app-example.netlify.app",
             learningOutcomes: ["API integration", "Async/Await", "Error handling"]
           },
@@ -85,7 +85,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript", "Recipe API"],
             difficulty: "Beginner",
             timeEstimate: "2-3 days",
-            githubUrl: "https://github.com/example/recipe-finder",
+            githubUrl: "https://github.com/Jupiter-Github/Recipe-Finder",
             demoUrl: "https://recipe-finder-example.netlify.app",
             learningOutcomes: ["API integration", "Search functionality", "Responsive design"]
           },
@@ -95,7 +95,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "2-3 days",
-            githubUrl: "https://github.com/example/quiz-app",
+            githubUrl: "https://github.com/SafdarJamal/quiz-app",
             demoUrl: "https://quiz-app-example.netlify.app",
             learningOutcomes: ["State management", "Timers", "Form handling"]
           },
@@ -105,7 +105,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "1-2 days",
-            githubUrl: "https://github.com/example/landing-page",
+            githubUrl: "https://github.com/nordicgiant2/awesome-landing-page",
             demoUrl: "https://landing-page-example.netlify.app",
             learningOutcomes: ["Responsive design", "CSS animations", "Layout techniques"]
           },
@@ -115,7 +115,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "1 day",
-            githubUrl: "https://github.com/example/digital-clock",
+            githubUrl: "https://github.com/Ajay-Dhangar/digital-clock",
             demoUrl: "https://digital-clock-example.netlify.app",
             learningOutcomes: ["Date/Time manipulation", "Interval functions", "Theme switching"]
           },
@@ -125,7 +125,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "1-2 days",
-            githubUrl: "https://github.com/example/form-validator",
+            githubUrl: "https://github.com/rajatrawal/form-validation-js",
             demoUrl: "https://form-validator-example.netlify.app",
             learningOutcomes: ["Form validation", "Regular expressions", "User feedback"]
           },
@@ -135,7 +135,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "2 days",
-            githubUrl: "https://github.com/example/image-gallery",
+            githubUrl: "https://github.com/bradtraversy/filterable_list",
             demoUrl: "https://image-gallery-example.netlify.app",
             learningOutcomes: ["Grid layout", "Modal windows", "Filtering"]
           },
@@ -145,7 +145,7 @@ const Projects = () => {
             technologies: ["HTML", "CSS", "JavaScript"],
             difficulty: "Beginner",
             timeEstimate: "2 days",
-            githubUrl: "https://github.com/example/calculator",
+            githubUrl: "https://github.com/zxcodes/JavaScript-Calculator",
             demoUrl: "https://calculator-example.netlify.app",
             learningOutcomes: ["Event delegation", "Math operations", "UI design"]
           }
@@ -167,7 +167,7 @@ const Projects = () => {
             technologies: ["React", "TMDB API", "Styled Components"],
             difficulty: "Intermediate",
             timeEstimate: "5-7 days",
-            githubUrl: "https://github.com/example/movie-app",
+            githubUrl: "https://github.com/karlhadwen/movie-database",
             demoUrl: "https://movie-app-example.netlify.app",
             learningOutcomes: ["API integration", "Search/filter", "Local storage"]
           },
@@ -187,7 +187,7 @@ const Projects = () => {
             technologies: ["React", "react-beautiful-dnd", "Styled Components"],
             difficulty: "Intermediate",
             timeEstimate: "6-8 days",
-            githubUrl: "https://github.com/example/kanban-board",
+            githubUrl: "https://github.com/ashritha-setlur/Capira",
             demoUrl: "https://kanban-board-example.netlify.app",
             learningOutcomes: ["Drag and drop", "Complex state management", "Performance optimization"]
           },
@@ -197,7 +197,7 @@ const Projects = () => {
             technologies: ["React", "Web Audio API", "Redux"],
             difficulty: "Intermediate",
             timeEstimate: "7-9 days",
-            githubUrl: "https://github.com/example/music-player",
+            githubUrl: "https://github.com/livecoders/music-player",
             demoUrl: "https://music-player-example.netlify.app",
             learningOutcomes: ["Audio manipulation", "Complex state management", "Custom controls"]
           },
@@ -269,7 +269,7 @@ const Projects = () => {
             technologies: ["React", "Canvas API", "Socket.io", "Redux"],
             difficulty: "Advanced",
             timeEstimate: "3-4 weeks",
-            githubUrl: "https://github.com/example/collaborative-whiteboard",
+            githubUrl: "https://github.com/excalidraw/excalidraw",
             demoUrl: "https://whiteboard-example.netlify.app",
             learningOutcomes: ["Canvas manipulation", "Real-time data", "Collaborative features"]
           },
@@ -367,7 +367,7 @@ const Projects = () => {
             technologies: ["Node.js", "Express", "MongoDB"],
             difficulty: "Beginner",
             timeEstimate: "2-3 days",
-            githubUrl: "https://github.com/expressjs/express",
+            githubUrl: "https://github.com/academind/node-restful-api-tutorial",
             demoUrl: "https://rest-api-example.herokuapp.com",
             learningOutcomes: ["RESTful principles", "Express middleware", "Database operations"]
           },
@@ -679,7 +679,7 @@ const Projects = () => {
             technologies: ["React", "Node.js", "Express", "MongoDB"],
             difficulty: "Beginner",
             timeEstimate: "1-2 weeks",
-            githubUrl: "https://github.com/example/personal-blog",
+            githubUrl: "https://github.com/olawanlejoel/blog-api",
             demoUrl: "https://personal-blog-example.netlify.app",
             learningOutcomes: ["Full-stack integration", "CRUD operations", "Authentication"]
           },
@@ -791,7 +791,7 @@ const Projects = () => {
             technologies: ["React", "Node.js", "Express", "MongoDB", "Socket.io"],
             difficulty: "Intermediate",
             timeEstimate: "3-4 weeks",
-            githubUrl: "https://github.com/example/social-platform",
+            githubUrl: "https://github.com/safak/youtube/tree/mern-social-app",
             demoUrl: "https://social-platform-example.netlify.app",
             learningOutcomes: ["Activity feeds", "Notifications", "Friend/Follow systems"]
           },
@@ -1001,7 +1001,7 @@ const Projects = () => {
             technologies: ["Node.js", "SQLite", "CSV", "JSON"],
             difficulty: "Beginner",
             timeEstimate: "1 week",
-            githubUrl: "https://github.com/example/data-porter",
+            githubUrl: "https://github.com/simonw/sqlite-utils",
             demoUrl: "https://data-porter-example.com",
             learningOutcomes: ["File parsing", "Data transformation", "Database operations"]
           },
