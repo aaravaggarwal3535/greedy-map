@@ -59,7 +59,7 @@ GreedyMap helps developers and tech enthusiasts understand the technology landsc
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/greedy-map.git
+git clone https://github.com/aaravaggarwal3535/greedy-map.git
 cd greedy-map
 ```
 

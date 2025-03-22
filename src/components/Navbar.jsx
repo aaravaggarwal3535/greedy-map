@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import PremiumStatus from '@/components/PremiumStatus';
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -238,7 +237,6 @@ export const Navbar = () => {
                 )}
               </AnimatePresence>
             </div>
-            <PremiumStatus />
           </nav>
           
           {/* Right side items - Auth */}
