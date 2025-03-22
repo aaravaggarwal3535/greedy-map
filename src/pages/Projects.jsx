@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import PremiumContent from '@/components/PremiumContent';
+import { Notsignin } from '@/components/Notsignin';
 
 const difficultyColors = {
   Beginner: 'bg-green-100 text-green-800 border-green-200',
@@ -1101,6 +1102,10 @@ const Projects = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  if(localStorage.userId == undefined){
+    return <Notsignin/>
+  }
+  
   return (
     <Layout>
       <div className="container px-4 py-8">

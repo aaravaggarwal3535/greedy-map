@@ -71,10 +71,10 @@ export const Navbar = () => {
 
   const navLinks = [
     { path: "/", label: "Home" },
-    { path: "/community", label: "Community" },
     { path: "/roadmap", label: "Roadmap" },
     { path: "/contributor", label: "Contributor" },
-    { path: "/skills", label: "Skills" }
+    { path: "/skills", label: "Skills" },
+    { path: "/community", label: "Community" },
   ];
 
   // Simplified mobile menu animation variants
