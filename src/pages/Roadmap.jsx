@@ -19,6 +19,7 @@ import {
   ChevronDown,
   ChevronRight
 } from 'lucide-react';
+import PremiumContent from '@/components/PremiumContent';
 
 const Roadmap = () => {
   const [searchTerm, setSearchTerm] = useState("");

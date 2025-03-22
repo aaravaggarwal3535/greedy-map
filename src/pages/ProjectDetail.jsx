@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { FiGithub, FiExternalLink, FiArrowLeft } from 'react-icons/fi';
+import PremiumContent from '@/components/PremiumContent';
 
 const difficultyColors = {
   Beginner: 'bg-green-100 text-green-800 border-green-200',
@@ -117,146 +118,151 @@ const ProjectDetail = () => {
         <h1 className="text-3xl md:text-4xl font-bold mb-4">{projectDetails?.title}</h1>
         <p className="text-lg text-gray-600 mb-8">{projectDetails?.description}</p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-          <Card className="overflow-hidden">
-            <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-bold mb-4">Project Details</h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Technologies</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {projectDetails?.technologies?.map((tech, i) => (
-                      <Badge key={i} variant="outline" className="px-3 py-1">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
+        <PremiumContent
+          title="Premium Project Details"
+          description="Access detailed project instructions, code examples, and resources to help you build this project successfully."
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <Card className="overflow-hidden">
+              <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+              <CardContent className="p-6">
+                <h2 className="text-xl font-bold mb-4">Project Details</h2>
                 
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Estimated Time</h3>
-                  <p>{projectDetails?.timeEstimate}</p>
-                </div>
-                
-                {projectDetails?.author && (
+                <div className="space-y-4">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">Author</h3>
-                    <a 
-                      href={projectDetails.author.github} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline flex items-center gap-1"
-                    >
-                      {projectDetails.author.name}
-                      <FiExternalLink className="h-3 w-3" />
-                    </a>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="overflow-hidden">
-            <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-bold mb-4">Resources</h2>
-              
-              <div className="space-y-4">
-                <div className="flex gap-3">
-                  <Button asChild className="flex-1">
-                    <a 
-                      href={projectDetails?.demoUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2"
-                    >
-                      <FiExternalLink className="h-4 w-4" />
-                      View Demo
-                    </a>
-                  </Button>
-                  
-                  <Button asChild variant="outline" className="flex-1">
-                    <a 
-                      href={projectDetails?.githubUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2"
-                    >
-                      <FiGithub className="h-4 w-4" />
-                      View Code
-                    </a>
-                  </Button>
-                </div>
-                
-                {projectDetails?.resources && projectDetails.resources.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-2">Additional Resources</h3>
-                    <ul className="space-y-2">
-                      {projectDetails.resources.map((resource, i) => (
-                        <li key={i}>
-                          <a 
-                            href={resource.url}
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline flex items-center gap-1"
-                          >
-                            {resource.title}
-                            <FiExternalLink className="h-3 w-3" />
-                          </a>
-                        </li>
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">Technologies</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {projectDetails?.technologies?.map((tech, i) => (
+                        <Badge key={i} variant="outline" className="px-3 py-1">
+                          {tech}
+                        </Badge>
                       ))}
-                    </ul>
+                    </div>
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        
-        <div className="space-y-8 mb-10">
-          {projectDetails?.longDescription && (
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Description</h2>
-              <div className="prose max-w-none">
-                <p>{projectDetails.longDescription}</p>
-              </div>
-            </div>
-          )}
+                  
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">Estimated Time</h3>
+                    <p>{projectDetails?.timeEstimate}</p>
+                  </div>
+                  
+                  {projectDetails?.author && (
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500 mb-1">Author</h3>
+                      <a 
+                        href={projectDetails.author.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline flex items-center gap-1"
+                      >
+                        {projectDetails.author.name}
+                        <FiExternalLink className="h-3 w-3" />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="overflow-hidden">
+              <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+              <CardContent className="p-6">
+                <h2 className="text-xl font-bold mb-4">Resources</h2>
+                
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <Button asChild className="flex-1">
+                      <a 
+                        href={projectDetails?.demoUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <FiExternalLink className="h-4 w-4" />
+                        View Demo
+                      </a>
+                    </Button>
+                    
+                    <Button asChild variant="outline" className="flex-1">
+                      <a 
+                        href={projectDetails?.githubUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <FiGithub className="h-4 w-4" />
+                        View Code
+                      </a>
+                    </Button>
+                  </div>
+                  
+                  {projectDetails?.resources && projectDetails.resources.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500 mb-2">Additional Resources</h3>
+                      <ul className="space-y-2">
+                        {projectDetails.resources.map((resource, i) => (
+                          <li key={i}>
+                            <a 
+                              href={resource.url}
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline flex items-center gap-1"
+                            >
+                              {resource.title}
+                              <FiExternalLink className="h-3 w-3" />
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
           
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Learning Outcomes</h2>
-            {projectDetails?.learningOutcomes && projectDetails.learningOutcomes.length > 0 ? (
-              <ul className="list-disc pl-5 space-y-2">
-                {projectDetails.learningOutcomes.map((outcome, i) => (
-                  <li key={i} className="text-gray-700">{outcome}</li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-500 italic">No learning outcomes specified.</p>
+          <div className="space-y-8 mb-10">
+            {projectDetails?.longDescription && (
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Description</h2>
+                <div className="prose max-w-none">
+                  <p>{projectDetails.longDescription}</p>
+                </div>
+              </div>
+            )}
+            
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Learning Outcomes</h2>
+              {projectDetails?.learningOutcomes && projectDetails.learningOutcomes.length > 0 ? (
+                <ul className="list-disc pl-5 space-y-2">
+                  {projectDetails.learningOutcomes.map((outcome, i) => (
+                    <li key={i} className="text-gray-700">{outcome}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500 italic">No learning outcomes specified.</p>
+              )}
+            </div>
+            
+            {projectDetails?.codeSnippets && projectDetails.codeSnippets.length > 0 && (
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Code Example</h2>
+                <div className="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto">
+                  <pre className="font-mono text-sm">
+                    {projectDetails.codeSnippets[0]?.code || '// No code provided'}
+                  </pre>
+                </div>
+              </div>
             )}
           </div>
           
-          {projectDetails?.codeSnippets && projectDetails.codeSnippets.length > 0 && (
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Code Example</h2>
-              <div className="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto">
-                <pre className="font-mono text-sm">
-                  {projectDetails.codeSnippets[0]?.code || '// No code provided'}
-                </pre>
-              </div>
-            </div>
-          )}
-        </div>
-        
-        <div className="flex justify-center mt-12">
-          <Button asChild size="lg" className="rounded-full px-8">
-            <Link to="/projects">
-              Explore More Projects
-            </Link>
-          </Button>
-        </div>
+          <div className="flex justify-center mt-12">
+            <Button asChild size="lg" className="rounded-full px-8">
+              <Link to="/projects">
+                Explore More Projects
+              </Link>
+            </Button>
+          </div>
+        </PremiumContent>
       </div>
     </Layout>
   );

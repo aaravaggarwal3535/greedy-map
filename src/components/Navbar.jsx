@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import PremiumStatus from '@/components/PremiumStatus';
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -70,10 +71,10 @@ export const Navbar = () => {
 
   const navLinks = [
     { path: "/", label: "Home" },
-    { path: "/community", label: "Community" }, 
     { path: "/roadmap", label: "Roadmap" },
     { path: "/contributor", label: "Contributor" },
-    { path: "/skills", label: "Skills" }
+    { path: "/skills", label: "Skills" },
+    { path: "/community", label: "Community" },
   ];
 
   // Simplified mobile menu animation variants
@@ -237,6 +238,7 @@ export const Navbar = () => {
                 )}
               </AnimatePresence>
             </div>
+            <PremiumStatus />
           </nav>
           
           {/* Right side items - Auth */}
@@ -395,6 +397,11 @@ export const Navbar = () => {
               </nav>
               
               <div className="border-t border-gray-200 my-2"></div>
+              
+              {/* Add Premium Status to mobile menu */}
+              <div className="flex justify-center my-2">
+                <PremiumStatus />
+              </div>
               
               <div className={isLoggedIn ? "flex flex-col gap-3 mt-2" : "grid grid-cols-2 gap-3 mt-2"}>
                 {isLoggedIn ? (

@@ -10,6 +10,8 @@ import { FiCode, FiDatabase, FiLayers, FiSmartphone, FiCloud, FiServer, FiGithub
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import PremiumContent from '@/components/PremiumContent';
+import { Notsignin } from '@/components/Notsignin';
 
 const difficultyColors = {
   Beginner: 'bg-green-100 text-green-800 border-green-200',
@@ -21,7 +23,24 @@ const Projects = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('All');
   const [loading, setLoading] = useState(false);
+  const [hasPurchased, setHasPurchased] = useState(false);
   const navigate = useNavigate();
+  
+  // Check if user has already purchased access
+  useEffect(() => {
+    const purchaseStatus = localStorage.getItem('projectAccess');
+    if (purchaseStatus === 'purchased') {
+      setHasPurchased(true);
+    }
+  }, []);
+
+  // Handle purchase action
+  const handlePurchase = () => {
+    // In a real application, this would include payment processing
+    setHasPurchased(true);
+    localStorage.setItem('projectAccess', 'purchased');
+    toast.success('You now have full access to all projects!');
+  };
   
   // Project data organized by category with realistic GitHub links
   const projectCategories = {
@@ -1083,6 +1102,10 @@ const Projects = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  if(localStorage.userId == undefined){
+    return <Notsignin/>
+  }
+  
   return (
     <Layout>
       <div className="container px-4 py-8">
@@ -1129,155 +1152,164 @@ const Projects = () => {
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
-        ) : !hasProjects ? (
-          <div className="text-center py-16">
-            <div className="inline-block p-4 rounded-full bg-gray-100 mb-4">
-              <FiSearch className="text-4xl text-gray-400" />
-            </div>
-            <h3 className="text-xl font-medium mb-2">No matching projects found</h3>
-            <p className="text-gray-600">
-              Try adjusting your search or filters to find more projects.
-            </p>
-          </div>
         ) : (
-          <Tabs defaultValue={Object.keys(filteredProjects)[0]} className="w-full">
-            <TabsList className="flex w-full overflow-x-auto justify-start mb-8 pb-2 space-x-2">
-              {Object.entries(filteredProjects).map(([category, { icon }]) => (
-                <TabsTrigger 
-                  key={category} 
-                  value={category} 
-                  className="flex items-center gap-2 px-4 py-2 rounded-full data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                >
-                  {icon} {category}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            
-            {Object.entries(filteredProjects).map(([category, { description, projects }]) => (
-              <TabsContent key={category} value={category} className="mt-0">
-                <div className="mb-8">
-                  <p className="text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-100">{description}</p>
+          <PremiumContent
+            title="Premium Project Collection"
+            description="Access our curated collection of project ideas with detailed instructions, code examples, and resources to accelerate your learning and portfolio development."
+            hasPurchased={hasPurchased}
+            onPurchase={handlePurchase}
+          >
+            {!hasProjects ? (
+              <div className="text-center py-16">
+                <div className="inline-block p-4 rounded-full bg-gray-100 mb-4">
+                  <FiSearch className="text-4xl text-gray-400" />
                 </div>
+                <h3 className="text-xl font-medium mb-2">No matching projects found</h3>
+                <p className="text-gray-600">
+                  Try adjusting your search or filters to find more projects.
+                </p>
+              </div>
+            ) : (
+              <Tabs defaultValue={Object.keys(filteredProjects)[0]} className="w-full">
+                <TabsList className="flex w-full overflow-x-auto justify-start mb-8 pb-2 space-x-2">
+                  {Object.entries(filteredProjects).map(([category, { icon }]) => (
+                    <TabsTrigger 
+                      key={category} 
+                      value={category} 
+                      className="flex items-center gap-2 px-4 py-2 rounded-full data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                    >
+                      {icon} {category}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
                 
-                {Object.entries(projects).map(([difficulty, projectList]) => (
-                  <div key={difficulty} className="mb-12">
-                    <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                      <Badge className={difficultyColors[difficulty]}>
-                        {difficulty}
-                      </Badge>
-                      <span>{difficulty} Projects</span>
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {projectList.map((project, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: index * 0.05 }}
-                        >
-                          <Card className="h-full flex flex-col hover:shadow-lg transition-shadow border-gray-200 overflow-hidden group">
-                            <div className={`h-2 w-full ${
-                              difficulty === 'Beginner' ? 'bg-gradient-to-r from-green-400 to-green-500' :
-                              difficulty === 'Intermediate' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' :
-                              'bg-gradient-to-r from-red-400 to-red-500'
-                            }`}></div>
-                            <CardHeader>
-                              <CardTitle className="font-bold text-gray-800 group-hover:text-blue-600 transition-colors flex justify-between items-center">
-                                <span>{project.title}</span>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm" 
-                                  className="h-8 w-8 p-0 rounded-full"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleViewDetails(project);
-                                  }}
-                                >
-                                  <FiInfo className="h-4 w-4" />
-                                  <span className="sr-only">Details</span>
-                                </Button>
-                              </CardTitle>
-                              <CardDescription>{project.description}</CardDescription>
-                            </CardHeader>
-                            <CardContent className="flex-grow">
-                              <div className="mb-4">
-                                <p className="text-sm font-medium mb-1">Technologies:</p>
-                                <div className="flex flex-wrap gap-1.5">
-                                  {project.technologies.map((tech, i) => (
-                                    <Badge key={i} variant="outline" className="text-xs">
-                                      {tech}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              </div>
-                              
-                              <div className="mb-4">
-                                <p className="text-sm font-medium mb-1">Estimated Time:</p>
-                                <p className="text-sm">{project.timeEstimate}</p>
-                              </div>
-                              
-                              <div>
-                                <p className="text-sm font-medium mb-1">Learning Outcomes:</p>
-                                <ul className="list-disc list-inside text-sm space-y-1 text-gray-700">
-                                  {project.learningOutcomes.slice(0, 3).map((outcome, i) => (
-                                    <li key={i}>{outcome}</li>
-                                  ))}
-                                  {project.learningOutcomes.length > 3 && (
-                                    <li className="text-blue-600 cursor-pointer" onClick={() => handleViewDetails(project)}>
-                                      +{project.learningOutcomes.length - 3} more outcomes...
-                                    </li>
-                                  )}
-                                </ul>
-                              </div>
-                            </CardContent>
-                            <CardFooter className="flex gap-2 pt-2 border-t">
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="flex-1 gap-1 bg-gray-50 hover:bg-gray-100"
-                                asChild
-                              >
-                                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                                  <FiGithub className="h-4 w-4" />
-                                  Code
-                                </a>
-                              </Button>
-                              
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="flex-1 gap-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
-                                asChild
-                              >
-                                <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
-                                  <FiExternalLink className="h-4 w-4" />
-                                  Demo
-                                </a>
-                              </Button>
-                              
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="px-2 text-gray-600 hover:text-blue-600"
-                                onClick={() => {
-                                  navigator.clipboard.writeText(project.title);
-                                  toast.success('Project name copied to clipboard');
-                                }}
-                                title="Copy project name"
-                              >
-                                <FiBookmark className="h-4 w-4" />
-                              </Button>
-                            </CardFooter>
-                          </Card>
-                        </motion.div>
-                      ))}
+                {Object.entries(filteredProjects).map(([category, { description, projects }]) => (
+                  <TabsContent key={category} value={category} className="mt-0">
+                    <div className="mb-8">
+                      <p className="text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-100">{description}</p>
                     </div>
-                  </div>
+                    
+                    {Object.entries(projects).map(([difficulty, projectList]) => (
+                      <div key={difficulty} className="mb-12">
+                        <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                          <Badge className={difficultyColors[difficulty]}>
+                            {difficulty}
+                          </Badge>
+                          <span>{difficulty} Projects</span>
+                        </h3>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {projectList.map((project, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3, delay: index * 0.05 }}
+                            >
+                              <Card className="h-full flex flex-col hover:shadow-lg transition-shadow border-gray-200 overflow-hidden group">
+                                <div className={`h-2 w-full ${
+                                  difficulty === 'Beginner' ? 'bg-gradient-to-r from-green-400 to-green-500' :
+                                  difficulty === 'Intermediate' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' :
+                                  'bg-gradient-to-r from-red-400 to-red-500'
+                                }`}></div>
+                                <CardHeader>
+                                  <CardTitle className="font-bold text-gray-800 group-hover:text-blue-600 transition-colors flex justify-between items-center">
+                                    <span>{project.title}</span>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="sm" 
+                                      className="h-8 w-8 p-0 rounded-full"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleViewDetails(project);
+                                      }}
+                                    >
+                                      <FiInfo className="h-4 w-4" />
+                                      <span className="sr-only">Details</span>
+                                    </Button>
+                                  </CardTitle>
+                                  <CardDescription>{project.description}</CardDescription>
+                                </CardHeader>
+                                <CardContent className="flex-grow">
+                                  <div className="mb-4">
+                                    <p className="text-sm font-medium mb-1">Technologies:</p>
+                                    <div className="flex flex-wrap gap-1.5">
+                                      {project.technologies.map((tech, i) => (
+                                        <Badge key={i} variant="outline" className="text-xs">
+                                          {tech}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="mb-4">
+                                    <p className="text-sm font-medium mb-1">Estimated Time:</p>
+                                    <p className="text-sm">{project.timeEstimate}</p>
+                                  </div>
+                                  
+                                  <div>
+                                    <p className="text-sm font-medium mb-1">Learning Outcomes:</p>
+                                    <ul className="list-disc list-inside text-sm space-y-1 text-gray-700">
+                                      {project.learningOutcomes.slice(0, 3).map((outcome, i) => (
+                                        <li key={i}>{outcome}</li>
+                                      ))}
+                                      {project.learningOutcomes.length > 3 && (
+                                        <li className="text-blue-600 cursor-pointer" onClick={() => handleViewDetails(project)}>
+                                          +{project.learningOutcomes.length - 3} more outcomes...
+                                        </li>
+                                      )}
+                                    </ul>
+                                  </div>
+                                </CardContent>
+                                <CardFooter className="flex gap-2 pt-2 border-t">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    className="flex-1 gap-1 bg-gray-50 hover:bg-gray-100"
+                                    asChild
+                                  >
+                                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                                      <FiGithub className="h-4 w-4" />
+                                      Code
+                                    </a>
+                                  </Button>
+                                  
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    className="flex-1 gap-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+                                    asChild
+                                  >
+                                    <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                                      <FiExternalLink className="h-4 w-4" />
+                                      Demo
+                                    </a>
+                                  </Button>
+                                  
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="px-2 text-gray-600 hover:text-blue-600"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(project.title);
+                                      toast.success('Project name copied to clipboard');
+                                    }}
+                                    title="Copy project name"
+                                  >
+                                    <FiBookmark className="h-4 w-4" />
+                                  </Button>
+                                </CardFooter>
+                              </Card>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </TabsContent>
                 ))}
-              </TabsContent>
-            ))}
-          </Tabs>
+              </Tabs>
+            )}
+          </PremiumContent>
         )}
       </div>
     </Layout>
