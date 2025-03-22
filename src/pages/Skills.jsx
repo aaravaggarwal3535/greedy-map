@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from 'react-router-dom';
+import { Notsignin } from '@/components/Notsignin';
 
 const Skills = () => {
   const [completedAssessments, setCompletedAssessments] = useState({});
@@ -350,6 +351,11 @@ module.exports = router;`
     }
   ];
 
+  // Fix the conditional rendering logic
+  if (localStorage.userId == undefined){
+    return <Notsignin/>;
+  }
+  
   return (
     <Layout>
       <div className="container mx-auto py-8 px-4 max-w-7xl">

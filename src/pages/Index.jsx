@@ -262,43 +262,43 @@ const Index = () => {
     const videos = [
       {
         id: 1,
-        src: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmUzeTg3ODJ3cGxjZTVibHNiZTF3M3gwNm5nZm5tNTF5Yzl6Y2VwZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3B60Gx1UJnDZ3tr6E/giphy.gif",
-        title: "AI & Robotics",
+        src: "https://cdn.dribbble.com/users/1162077/screenshots/5427805/media/e87a74c9f13581d112d61a0e762aaef2.gif",
+        title: "AI & Machine Learning",
         category: "Future Tech"
       },
       {
         id: 2,
-        src: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaTBlc3BtMnN5NXNseHdiYTd1YWh3OXZraGF5N3Vsc3R5c3JyZXhwbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/lP8xu5t2DLGG045H8F/giphy.gif",
+        src: "https://cdn.dribbble.com/users/2574702/screenshots/6702374/digital_twin.gif",
         title: "Digital Twins",
         category: "Smart Cities"
       },
       {
         id: 3,
-        src: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOW56c2RrZXM5MWJubWJ1dXkxaWU0Z2V5MGZnbTlveHNsdDZ1NHhlMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Ll22OhMLAlVDb8UQWe/giphy.gif",
+        src: "https://cdn.dribbble.com/users/238042/screenshots/1427475/media/f17032caf022af12b8117bb8f2c9e7c0.gif",
         title: "AR Interfaces",
         category: "Mixed Reality"
       },
       {
         id: 4,
-        src: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWF6MjQwampyeHV6eGQwZjJqOHJmNWI5eHVrOWZlcXI0MWgzdGhnNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/077i6AULCXc0FKTj9s/giphy.gif",
+        src: "https://cdn.dribbble.com/users/1450874/screenshots/4047196/media/e663225d917ddcc591b75aa9e759bfc7.gif",
         title: "Wearable Tech",
         category: "IoT Devices"
       },
       {
         id: 5,
-        src: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3VtdWl3d3h0OXcwNWFndjV0a3plc3VudTI5anBlcjJyMjNxc21zZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT9IgzoKnwFNmISR8I/giphy.gif",
+        src: "https://cdn.dribbble.com/users/110792/screenshots/3898390/media/c6e170022c54e632ce9e25c7beea4cc8.gif",
         title: "Circuit Design",
         category: "Hardware"
       },
       {
         id: 6,
-        src: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTcycnRsZGJqbXYzOTM0anQ3Njh1aDJrcDNudXp1bmh5NnA5Mzd0ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26tn33aiTi1jkl6H6/giphy.gif",
+        src: "https://cdn.dribbble.com/users/2008861/screenshots/15320458/media/31a26274f79ce4bcd1340026c074bc70.gif",
         title: "Data Processing",
         category: "Cloud Computing"
       },
       {
         id: 7,
-        src: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWs2MHgycnZ1Ymw2Z3JtaGh3cmtwcDJjeTB5Y2p5OXhxc3JxdWpiaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l46Cnk4ZRNj7hbUbu/giphy.gif",
+        src: "https://cdn.dribbble.com/users/108690/screenshots/2832948/media/55c4fff0932d0be2d2a8cd0d89cd3026.gif",
         title: "Smart Watch",
         category: "Wearable Tech"
       }
@@ -880,6 +880,13 @@ const Index = () => {
                           <Button size="lg" className="px-8 py-7 text-lg font-medium rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-800 border-0 transition-all duration-500 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] group">
                             <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-500/0 via-blue-100/10 to-blue-500/0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700"></div>
                             <span className="mr-2 relative z-10">Get started for free</span>
+                            <ArrowRight className="ml-2 h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                          </Button>
+                        </Link>
+                        <Link to="/projects">
+                          <Button size="lg" className="px-8 py-7 text-lg font-medium rounded-full bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 hover:from-green-700 hover:via-emerald-700 hover:to-green-800 border-0 transition-all duration-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] group">
+                            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-green-500/0 via-green-100/10 to-green-500/0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700"></div>
+                            <span className="mr-2 relative z-10">Buy Now</span>
                             <ArrowRight className="ml-2 h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
                           </Button>
                         </Link>

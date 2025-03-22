@@ -4,10 +4,11 @@ import { Layout } from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CloudCog, Code, Database, Globe, Server, Search, Instagram } from 'lucide-react';
+import { ArrowRight, CloudCog, Code, Database, Globe, Server, Search, Instagram, X } from 'lucide-react';
 import { SiNetflix, SiSpotify, SiUber, SiAirbnb, SiSlack, SiStripe } from "react-icons/si";
 import { FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { Notsignin } from '@/components/Notsignin';
 
 const platformsData = [
   {
@@ -175,6 +176,7 @@ const techCategoryMapping = {
 const Platforms = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPlatforms, setFilteredPlatforms] = useState(platformsData);
+  const [showSigninModal, setShowSigninModal] = useState(false);
 
   // Handle search functionality
   useEffect(() => {
@@ -208,6 +210,18 @@ const Platforms = () => {
   // Handle tag click to filter platforms
   const handleTagClick = (tag) => {
     setSearchTerm(tag);
+  };
+
+  // Handle tech stack view click
+  const handleViewTechStack = (e, platformId) => {
+    e.preventDefault();
+    // Check if user is signed in
+    if (localStorage.userId === undefined) {
+      setShowSigninModal(true);
+    } else {
+      // If signed in, navigate to tech stack detail
+      window.location.href = `/techstack/${platformId}`;
+    }
   };
 
   return (
@@ -297,7 +311,7 @@ const Platforms = () => {
                   transition={{ delay: index * 0.1 + 0.5, duration: 0.5 }}
                   whileHover={{ y: -5 }}
                 >
-                  <Link to={`/techstack/${platform.id}`} className="block h-full">
+                  <div className="block h-full">
                     <Card className="overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group h-full flex flex-col">
                       <CardHeader className="pb-2 pt-6 flex flex-col items-center">
                         <div className="flex justify-center mb-4">
@@ -322,15 +336,19 @@ const Platforms = () => {
                         </div>
                       </CardContent>
                       <CardFooter className="flex justify-center py-5 px-6 border-t border-gray-100 mt-auto">
-                        <Button variant="outline" className="w-full transition-all duration-300 border-gray-300 hover:bg-gray-50 hover:border-gray-400 rounded-3xl">
-                          <span className="flex justify-center  items-center space-x-2">
+                        <Button 
+                          variant="outline" 
+                          className="w-full transition-all duration-300 border-gray-300 hover:bg-gray-50 hover:border-gray-400 rounded-3xl"
+                          onClick={(e) => handleViewTechStack(e, platform.id)}
+                        >
+                          <span className="flex justify-center items-center space-x-2">
                             <span>View Tech Stack</span>
                             <ArrowRight className="h-3.5 w-3.5 opacity-70" />
                           </span>
                         </Button>
                       </CardFooter>
                     </Card>
-                  </Link>
+                  </div>
                 </motion.div>
               ))
             ) : (
@@ -366,6 +384,21 @@ const Platforms = () => {
           </motion.div>
         </div>
       </motion.section>
+
+      {/* Not Signed In Modal */}
+      {showSigninModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="relative bg-white rounded-lg max-w-md w-full p-2">
+            <button
+              onClick={() => setShowSigninModal(false)}
+              className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-full"
+            >
+              <X size={20} />
+            </button>
+            <Notsignin />
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };

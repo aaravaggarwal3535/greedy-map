@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { SiNetflix, SiSpotify, SiUber, SiAirbnb, SiSlack, SiStripe } from "react-icons/si";
 import { FaXTwitter } from "react-icons/fa6";
 import { Instagram } from "lucide-react";
+import {Notsignin} from '@/components/Notsignin';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 
@@ -36,14 +37,14 @@ const Contributor = () => {
     const fetchContributors = async () => {
       setIsLoading(true);
       setError(null);
-      
+
       try {
         const response = await fetch('http://localhost:3000/contributor');
-        
+
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
-        
+
         const data = await response.json();
         console.log('Contributors fetched successfully:', data);
         setContributors(data);
@@ -65,7 +66,7 @@ const Contributor = () => {
     contributor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     contributor.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
     contributor.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (contributor.platformContributions && contributor.platformContributions.some(pc => 
+    (contributor.platformContributions && contributor.platformContributions.some(pc =>
       pc.platformName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pc.techUpdated.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()))
     ))
@@ -97,6 +98,11 @@ const Contributor = () => {
     setSelectedContributor(contributor);
   };
 
+  if (localStorage.userId == undefined) {
+    return (
+      <Notsignin />)
+  }
+  else {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
@@ -282,13 +288,13 @@ const Contributor = () => {
         {/* Contributor Details Modal */}
         {selectedContributor && (
           <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-            <div 
-              className="bg-white rounded-lg p-6 w-full max-w-[600px] max-h-[85vh] overflow-y-auto" 
+            <div
+              className="bg-white rounded-lg p-6 w-full max-w-[600px] max-h-[85vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Rest of the modal code remains unchanged */}
               <div className="flex justify-end mb-2">
-                <button 
+                <button
                   onClick={() => setSelectedContributor(null)}
                   className="p-1 rounded-full hover:bg-gray-100"
                 >
@@ -313,7 +319,7 @@ const Contributor = () => {
               <div>
                 <h3 className="text-lg font-medium mb-2">About</h3>
                 <p className="text-gray-600 mb-6">{selectedContributor.bio}</p>
-                
+
                 {/* Contribution count */}
                 <div className="flex items-center mb-6 text-sm bg-blue-50 p-3 rounded-lg">
                   <span className="font-bold text-blue-700 text-lg mr-2">{selectedContributor.contributions}</span>
@@ -332,7 +338,7 @@ const Contributor = () => {
                     </span>
                   ))}
                 </div>
-                
+
                 {/* Platform Contributions */}
                 {selectedContributor.platformContributions && selectedContributor.platformContributions.length > 0 && (
                   <>
@@ -342,7 +348,7 @@ const Contributor = () => {
                         <div key={idx} className="bg-gray-50 p-4 rounded-lg">
                           <div className="flex items-center gap-2 mb-2">
                             {platformIcons[pc.platformId]}
-                            <Link 
+                            <Link
                               to={`/techstack/${pc.platformId}`}
                               className="font-medium hover:text-blue-600 flex items-center gap-1"
                               onClick={() => setSelectedContributor(null)}
@@ -351,9 +357,9 @@ const Contributor = () => {
                               <ArrowRight className="h-3.5 w-3.5" />
                             </Link>
                           </div>
-                          
+
                           <p className="text-sm text-gray-700 mb-3">{pc.description}</p>
-                          
+
                           <div className="mb-3">
                             <p className="text-xs uppercase font-semibold text-gray-500 mb-1.5">Technologies Updated</p>
                             <div className="flex flex-wrap gap-1.5">
@@ -377,6 +383,7 @@ const Contributor = () => {
       </div>
     </Layout>
   );
+} 
 };
 
 export default Contributor;
