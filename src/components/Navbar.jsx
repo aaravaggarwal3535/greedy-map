@@ -202,8 +202,7 @@ export const Navbar = () => {
                   showTransparentNavbar ? 'text-white' : 'text-gray-700 hover:text-blue-600'
                 }`}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                onMouseEnter={() => setIsDropdownOpen(true)} 
-                onMouseLeave={() => setIsDropdownOpen(false)}
+                onMouseEnter={() => setIsDropdownOpen(true)}
               >
                 <span className={showTransparentNavbar ? 'text-white' : ''}>Resources</span>
                 <ChevronDown 
@@ -222,6 +221,7 @@ export const Navbar = () => {
                     exit="hidden"
                     variants={dropdownVariants}
                     className="absolute right-0 mt-2 py-2 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                    onMouseEnter={() => setIsDropdownOpen(true)}
                     onMouseLeave={() => setIsDropdownOpen(false)}
                   >
                     <Link to="/platforms" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">
@@ -370,49 +370,57 @@ export const Navbar = () => {
                   </motion.div>
                 ))}
                 
+                {/* Improved Resources dropdown for mobile */}
                 <motion.div variants={menuItemVariants}>
-                  <div className="flex justify-between items-center p-3 rounded-md hover:bg-gray-50">
+                  {/* Changed from div to button for better accessibility */}
+                  <button 
+                    onClick={() => {
+                      // Toggle a local state for mobile resources dropdown
+                      const resourcesEl = document.getElementById('mobile-resources-dropdown');
+                      if (resourcesEl) {
+                        resourcesEl.classList.toggle('hidden');
+                      }
+                    }}
+                    className="w-full flex justify-between items-center p-3 rounded-md hover:bg-gray-50 text-left"
+                    aria-expanded="false"
+                    aria-controls="mobile-resources-dropdown"
+                  >
                     <span>Resources</span>
                     <ChevronDown className="h-4 w-4" />
-                  </div>
-                  <div className="ml-4 flex flex-col gap-1">
+                  </button>
+                  
+                  {/* Resources dropdown content */}
+                  <div id="mobile-resources-dropdown" className="ml-4 flex flex-col gap-1 hidden">
                     <Link 
                       to="/platforms" 
                       onClick={() => setMobileMenuOpen(false)}
-                      className="p-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-150"
+                      className="p-3 rounded-md text-gray-600 hover:bg-gray-50 hover:text-blue-600 transition-colors duration-150"
                     >
-                      <div className="flex items-center justify-between w-full">
-                        <div>
-                          <div>Platform</div>
-                          <div className="text-xs text-gray-500">Explore development platforms</div>
-                        </div>
-                        <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
+                      <div className="flex flex-col">
+                        <div className="font-medium">Platform</div>
+                        <div className="text-xs text-gray-500">Explore development platforms</div>
                       </div>
                     </Link>
+                    
                     <Link 
                       to="/learning" 
                       onClick={() => setMobileMenuOpen(false)}
-                      className="p-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-150"
+                      className="p-3 rounded-md text-gray-600 hover:bg-gray-50 hover:text-blue-600 transition-colors duration-150"
                     >
-                      <div className="flex items-center justify-between w-full">
-                        <div>
-                          <div>Learning</div>
-                          <div className="text-xs text-gray-500">Educational resources & guides</div>
-                        </div>
-                        <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
+                      <div className="flex flex-col">
+                        <div className="font-medium">Learning</div>
+                        <div className="text-xs text-gray-500">Educational resources & guides</div>
                       </div>
                     </Link>
+                    
                     <Link 
                       to="/projects" 
                       onClick={() => setMobileMenuOpen(false)}
-                      className="p-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-150"
+                      className="p-3 rounded-md text-gray-600 hover:bg-gray-50 hover:text-blue-600 transition-colors duration-150"
                     >
-                      <div className="flex items-center justify-between w-full">
-                        <div>
-                          <div>Projects</div>
-                          <div className="text-xs text-gray-500">Practical project examples</div>
-                        </div>
-                        <ChevronDown className="h-4 w-4 ml-2 transform -rotate-90" />
+                      <div className="flex flex-col">
+                        <div className="font-medium">Projects</div>
+                        <div className="text-xs text-gray-500">Practical project examples</div>
                       </div>
                     </Link>
                   </div>
